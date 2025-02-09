@@ -1,24 +1,10 @@
+// VideoTestimonials.js
 import React, { useEffect, useState } from "react";
-
-const AlertMessage = ({ message, type, onClose }) => (
-  <div
-    className={`fixed top-4 right-4 p-4 rounded shadow-lg ${
-      type === 'success' ? 'bg-green-500' : 'bg-red-500'
-    } text-white max-w-sm animate-fade-in z-50`}
-  >
-    <div className="flex justify-between items-center">
-      <span>{message}</span>
-      <button 
-        onClick={onClose}
-        className="ml-4 text-white hover:text-gray-200"
-      >
-        ×
-      </button>
-    </div>
-  </div>
-);
+import AlertMessage from "./AlertMessage";
 
 const VideoTestimonials = () => {
+  const BASE_URL = "https://backend.marichiventures.com/admin/pages";
+  
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,19 +17,16 @@ const VideoTestimonials = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [alert, setAlert] = useState(null);
 
-  // Show alert message
   const showAlert = (message, type = 'error') => {
     setAlert({ message, type });
-    setTimeout(() => setAlert(null), 3000); // Hide after 3 seconds
+    setTimeout(() => setAlert(null), 3000);
   };
 
   const fetchTestimonials = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(
-        "http://localhost/Admin-panel/Backend/pages/video_testimonials.php"
-      );
+      const response = await fetch(`${BASE_URL}/video_testimonials.php`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -72,13 +55,10 @@ const VideoTestimonials = () => {
     });
 
     try {
-      const response = await fetch(
-        "http://localhost/Admin-panel/Backend/pages/video_testimonials.php",
-        {
-          method: "POST",
-          body: formDataToSend,
-        }
-      );
+      const response = await fetch(`${BASE_URL}/video_testimonials.php`, {
+        method: "POST",
+        body: formDataToSend,
+      });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -117,13 +97,10 @@ const VideoTestimonials = () => {
     formDataToSend.append("id", id);
 
     try {
-      const response = await fetch(
-        "http://localhost/Admin-panel/Backend/pages/video_testimonials.php",
-        {
-          method: "POST",
-          body: formDataToSend,
-        }
-      );
+      const response = await fetch(`${BASE_URL}/video_testimonials.php`, {
+        method: "POST",
+        body: formDataToSend,
+      });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -153,7 +130,6 @@ const VideoTestimonials = () => {
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Video Testimonials</h2>
 
-      {/* Alert Message */}
       {alert && (
         <AlertMessage
           message={alert.message}
@@ -162,7 +138,6 @@ const VideoTestimonials = () => {
         />
       )}
 
-      {/* Form */}
       <form onSubmit={handleSubmit} className="mb-6">
         <div className="mb-2">
           <label className="block mb-1">Name:</label>
@@ -170,9 +145,7 @@ const VideoTestimonials = () => {
             type="text"
             className="w-full p-2 border rounded"
             value={formData.name}
-            onChange={(e) =>
-              setFormData({ ...formData, name: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             required
           />
         </div>
@@ -181,9 +154,7 @@ const VideoTestimonials = () => {
           <textarea
             className="w-full p-2 border rounded"
             value={formData.description}
-            onChange={(e) =>
-              setFormData({ ...formData, description: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             required
           ></textarea>
         </div>
@@ -193,9 +164,7 @@ const VideoTestimonials = () => {
             type="url"
             className="w-full p-2 border rounded"
             value={formData.videoUrl}
-            onChange={(e) =>
-              setFormData({ ...formData, videoUrl: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
             required
             placeholder="https://example.com/video"
           />
@@ -222,7 +191,6 @@ const VideoTestimonials = () => {
         </div>
       </form>
 
-      {/* Testimonials List */}
       <div>
         {testimonials.length === 0 ? (
           <p className="text-gray-500">No testimonials found.</p>
