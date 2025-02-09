@@ -1,0 +1,450 @@
+[09-Feb-2025 10:51:58 Europe/Berlin] Database connection successful
+[09-Feb-2025 10:51:58 Europe/Berlin] Table found: text_testimonials
+[09-Feb-2025 10:51:58 Europe/Berlin] Table found: video_testimonials
+[09-Feb-2025 10:52:20 Europe/Berlin] Database connection successful
+[09-Feb-2025 10:52:37 Europe/Berlin] Database connection successful
+[09-Feb-2025 10:52:37 Europe/Berlin] Request Method: GET
+[09-Feb-2025 10:52:37 Europe/Berlin] Executing query: SELECT * FROM text_testimonial ORDER BY created_at DESC
+[09-Feb-2025 10:52:37 Europe/Berlin] Error in text_testimonials.php: Table 'adminpanel.text_testimonial' doesn't exist
+[09-Feb-2025 10:53:40 Europe/Berlin] Database connection successful
+[09-Feb-2025 10:53:40 Europe/Berlin] Request Method: GET
+[09-Feb-2025 10:53:40 Europe/Berlin] Executing query: SELECT * FROM text_testimonial ORDER BY created_at DESC
+[09-Feb-2025 10:53:40 Europe/Berlin] Error in text_testimonials.php: Table 'adminpanel.text_testimonial' doesn't exist
+[09-Feb-2025 10:53:40 Europe/Berlin] Database connection successful
+[09-Feb-2025 10:53:40 Europe/Berlin] Request Method: GET
+[09-Feb-2025 10:53:40 Europe/Berlin] Executing query: SELECT * FROM text_testimonial ORDER BY created_at DESC
+[09-Feb-2025 10:53:40 Europe/Berlin] Error in text_testimonials.php: Table 'adminpanel.text_testimonial' doesn't exist
+[09-Feb-2025 10:54:54 Europe/Berlin] Database connection successful
+[09-Feb-2025 10:54:54 Europe/Berlin] Request Method: GET
+[09-Feb-2025 10:54:54 Europe/Berlin] Executing query: SELECT * FROM text_testimonial ORDER BY created_at DESC
+[09-Feb-2025 10:54:54 Europe/Berlin] Error in text_testimonials.php: Table 'adminpanel.text_testimonial' doesn't exist
+[09-Feb-2025 10:54:54 Europe/Berlin] Database connection successful
+[09-Feb-2025 10:54:54 Europe/Berlin] Request Method: GET
+[09-Feb-2025 10:54:54 Europe/Berlin] Executing query: SELECT * FROM text_testimonial ORDER BY created_at DESC
+[09-Feb-2025 10:54:54 Europe/Berlin] Error in text_testimonials.php: Table 'adminpanel.text_testimonial' doesn't exist
+[09-Feb-2025 10:59:06 Europe/Berlin] Database connection successful
+[09-Feb-2025 10:59:06 Europe/Berlin] Request Method: GET
+[09-Feb-2025 10:59:06 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 10:59:06 Europe/Berlin] Sending testimonials: Array
+(
+    [0] => Array
+        (
+            [id] => 3
+            [name] => test 1
+            [content] => sgsvddvsdv
+            [image] => uploads/Screenshot 2025-02-04 at 6.09.45 PM.png
+            [created_at] => 2025-02-08 20:11:14
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [name] => Test 1
+            [content] => Test 1
+            [image] => uploads/Screenshot 2025-02-04 at 6.09.45 PM.png
+            [created_at] => 2025-02-08 19:52:55
+        )
+
+)
+
+[09-Feb-2025 10:59:11 Europe/Berlin] Database connection successful
+[09-Feb-2025 10:59:11 Europe/Berlin] Request Method: GET
+[09-Feb-2025 10:59:11 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 10:59:11 Europe/Berlin] Sending testimonials: Array
+(
+    [0] => Array
+        (
+            [id] => 3
+            [name] => test 1
+            [content] => sgsvddvsdv
+            [image] => uploads/Screenshot 2025-02-04 at 6.09.45 PM.png
+            [created_at] => 2025-02-08 20:11:14
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [name] => Test 1
+            [content] => Test 1
+            [image] => uploads/Screenshot 2025-02-04 at 6.09.45 PM.png
+            [created_at] => 2025-02-08 19:52:55
+        )
+
+)
+
+[09-Feb-2025 10:59:11 Europe/Berlin] Database connection successful
+[09-Feb-2025 10:59:11 Europe/Berlin] Request Method: GET
+[09-Feb-2025 10:59:11 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 10:59:11 Europe/Berlin] Sending testimonials: Array
+(
+    [0] => Array
+        (
+            [id] => 3
+            [name] => test 1
+            [content] => sgsvddvsdv
+            [image] => uploads/Screenshot 2025-02-04 at 6.09.45 PM.png
+            [created_at] => 2025-02-08 20:11:14
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [name] => Test 1
+            [content] => Test 1
+            [image] => uploads/Screenshot 2025-02-04 at 6.09.45 PM.png
+            [created_at] => 2025-02-08 19:52:55
+        )
+
+)
+
+[09-Feb-2025 10:59:17 Europe/Berlin] Database connection successful
+[09-Feb-2025 10:59:17 Europe/Berlin] Executing query: SELECT * FROM video_testimonial ORDER BY created_at DESC
+[09-Feb-2025 10:59:17 Europe/Berlin] Error in video_testimonials.php: Table 'adminpanel.video_testimonial' doesn't exist
+[09-Feb-2025 10:59:17 Europe/Berlin] Database connection successful
+[09-Feb-2025 10:59:17 Europe/Berlin] Executing query: SELECT * FROM video_testimonial ORDER BY created_at DESC
+[09-Feb-2025 10:59:17 Europe/Berlin] Error in video_testimonials.php: Table 'adminpanel.video_testimonial' doesn't exist
+[09-Feb-2025 10:59:54 Europe/Berlin] Database connection successful
+[09-Feb-2025 10:59:54 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 10:59:54 Europe/Berlin] Database connection successful
+[09-Feb-2025 10:59:54 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 11:00:33 Europe/Berlin] Database connection successful
+[09-Feb-2025 11:00:33 Europe/Berlin] Request Method: GET
+[09-Feb-2025 11:00:33 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 11:00:33 Europe/Berlin] Sending testimonials: Array
+(
+    [0] => Array
+        (
+            [id] => 3
+            [name] => test 1
+            [content] => sgsvddvsdv
+            [image] => uploads/Screenshot 2025-02-04 at 6.09.45 PM.png
+            [created_at] => 2025-02-08 20:11:14
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [name] => Test 1
+            [content] => Test 1
+            [image] => uploads/Screenshot 2025-02-04 at 6.09.45 PM.png
+            [created_at] => 2025-02-08 19:52:55
+        )
+
+)
+
+[09-Feb-2025 11:00:33 Europe/Berlin] Database connection successful
+[09-Feb-2025 11:00:33 Europe/Berlin] Request Method: GET
+[09-Feb-2025 11:00:33 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 11:00:33 Europe/Berlin] Sending testimonials: Array
+(
+    [0] => Array
+        (
+            [id] => 3
+            [name] => test 1
+            [content] => sgsvddvsdv
+            [image] => uploads/Screenshot 2025-02-04 at 6.09.45 PM.png
+            [created_at] => 2025-02-08 20:11:14
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [name] => Test 1
+            [content] => Test 1
+            [image] => uploads/Screenshot 2025-02-04 at 6.09.45 PM.png
+            [created_at] => 2025-02-08 19:52:55
+        )
+
+)
+
+[09-Feb-2025 11:00:54 Europe/Berlin] Database connection successful
+[09-Feb-2025 11:00:54 Europe/Berlin] Request Method: POST
+[09-Feb-2025 11:00:54 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/text_testimonials.php on line 71
+[09-Feb-2025 11:08:42 Europe/Berlin] Database connection successful
+[09-Feb-2025 11:08:42 Europe/Berlin] Request Method: GET
+[09-Feb-2025 11:08:42 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 11:09:00 Europe/Berlin] Database connection successful
+[09-Feb-2025 11:09:00 Europe/Berlin] Request Method: GET
+[09-Feb-2025 11:09:00 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 11:09:00 Europe/Berlin] Database connection successful
+[09-Feb-2025 11:09:00 Europe/Berlin] Request Method: GET
+[09-Feb-2025 11:09:00 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 11:09:13 Europe/Berlin] Database connection successful
+[09-Feb-2025 11:09:13 Europe/Berlin] Request Method: POST
+[09-Feb-2025 11:09:13 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/text_testimonials.php on line 13
+[09-Feb-2025 11:16:36 Europe/Berlin] Database connection successful
+[09-Feb-2025 11:16:36 Europe/Berlin] Request Method: GET
+[09-Feb-2025 11:16:36 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 11:16:36 Europe/Berlin] Database connection successful
+[09-Feb-2025 11:16:36 Europe/Berlin] Request Method: GET
+[09-Feb-2025 11:16:36 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:09:24 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:09:24 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:09:24 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:09:24 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:09:24 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:09:24 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:09:42 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:09:42 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:09:42 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/text_testimonials.php on line 13
+[09-Feb-2025 12:10:53 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:10:53 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:10:53 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:10:53 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:10:53 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:10:53 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:12:19 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:12:19 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:12:19 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:12:43 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:12:43 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:12:43 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/text_testimonials.php on line 13
+[09-Feb-2025 12:15:16 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:15:16 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/db.php on line 43
+[09-Feb-2025 12:15:22 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:15:22 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/db.php on line 43
+[09-Feb-2025 12:15:23 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:15:23 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/db.php on line 43
+[09-Feb-2025 12:15:23 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:15:23 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/db.php on line 43
+[09-Feb-2025 12:15:24 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:15:24 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/db.php on line 43
+[09-Feb-2025 12:15:24 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:15:24 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/db.php on line 43
+[09-Feb-2025 12:15:26 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:15:26 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/db.php on line 43
+[09-Feb-2025 12:18:07 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:18:07 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/db.php on line 43
+[09-Feb-2025 12:18:07 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:18:07 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/db.php on line 43
+[09-Feb-2025 12:18:07 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:18:07 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/db.php on line 43
+[09-Feb-2025 12:18:22 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:18:22 Europe/Berlin] Error [2]: mkdir(): Permission denied in /Applications/XAMPP/xamppfiles/htdocs/Admin-panel/Backend/pages/db.php on line 43
+[09-Feb-2025 12:20:10 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:20:10 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:20:39 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:20:39 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:20:39 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:20:39 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:20:43 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:20:43 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:20:43 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:20:43 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:20:43 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:20:43 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:20:43 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:20:43 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:20:55 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:20:55 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:20:55 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:20:55 Europe/Berlin] Exception: Call to undefined function createUploadDirectory()
+Stack trace: #0 {main}
+[09-Feb-2025 12:21:49 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:21:49 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:21:49 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:21:49 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:21:49 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:21:49 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:21:49 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:21:49 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:22:00 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:22:00 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:22:00 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:22:00 Europe/Berlin] Exception: Undefined constant "UPLOAD_DIR"
+Stack trace: #0 {main}
+[09-Feb-2025 12:22:45 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:22:45 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:22:45 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:22:45 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:22:45 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:22:45 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:22:45 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:22:45 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:22:54 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:22:54 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:22:54 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:22:54 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:22:54 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:22:54 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:22:54 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:23:23 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:23:23 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:23:23 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:24:56 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:24:56 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:24:56 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:24:56 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:24:56 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:24:56 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:24:56 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:24:56 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:25:02 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:25:02 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:25:02 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:25:04 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:25:04 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:25:04 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:25:04 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:25:04 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:25:04 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:25:04 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:25:04 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:25:19 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:25:19 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:25:19 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:25:19 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:25:19 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:25:19 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:25:19 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:25:55 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:25:55 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:25:55 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:25:55 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:25:55 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:25:55 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:25:55 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:26:00 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:26:00 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:26:00 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:26:10 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:26:10 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:26:10 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:26:10 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:29:29 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:29:29 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:29:29 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:29:29 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:29:29 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:29:29 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:29:29 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:29:29 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:30:02 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:30:02 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:30:02 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:30:02 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:30:02 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:30:02 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:30:02 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:30:06 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:30:06 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:30:06 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:30:06 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:30:06 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:30:06 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:30:06 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:33:18 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:33:18 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:33:18 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:33:18 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:33:48 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:33:48 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:33:48 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:33:48 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:33:48 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:33:48 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:33:48 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:33:48 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:34:01 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:34:01 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:34:01 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:34:01 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:34:01 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:34:01 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:34:01 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:34:30 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:34:30 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:34:30 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:34:30 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:34:30 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:34:30 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:34:30 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:34:50 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:34:50 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:34:50 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:34:50 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:34:50 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:34:50 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:34:50 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:35:04 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:35:04 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:35:04 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:35:04 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:35:04 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:35:04 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:35:46 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:35:46 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:35:46 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:35:46 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:35:46 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:36:18 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:36:18 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:36:18 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:36:18 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:36:18 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:36:36 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:36:36 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:36:36 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:36:36 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:36:36 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:37:52 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:37:52 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:37:52 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:37:56 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:37:56 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:37:56 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:37:56 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:37:56 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:37:56 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:38:55 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:38:55 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:38:55 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:38:55 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:38:55 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:39:03 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:39:03 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:39:03 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:39:03 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:39:03 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:39:07 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:39:07 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:39:07 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:39:07 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:39:07 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:39:23 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:39:23 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:39:23 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:39:23 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:39:23 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:39:23 Europe/Berlin] Executing query: SELECT * FROM video_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:39:26 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:39:26 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:39:26 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:39:26 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:39:26 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:39:26 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:39:26 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:39:26 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:40:26 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:40:26 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:40:26 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:40:26 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:40:26 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:40:26 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:40:26 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:40:26 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 12:41:36 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:41:36 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:41:36 Europe/Berlin] Request Method: POST
+[09-Feb-2025 12:41:36 Europe/Berlin] Database connection successful
+[09-Feb-2025 12:41:36 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 12:41:36 Europe/Berlin] Request Method: GET
+[09-Feb-2025 12:41:36 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 13:01:35 Europe/Berlin] Database connection successful
+[09-Feb-2025 13:01:35 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 13:01:35 Europe/Berlin] Request Method: GET
+[09-Feb-2025 13:01:35 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
+[09-Feb-2025 13:01:37 Europe/Berlin] Database connection successful
+[09-Feb-2025 13:01:37 Europe/Berlin] Required directories created successfully
+[09-Feb-2025 13:01:37 Europe/Berlin] Request Method: GET
+[09-Feb-2025 13:01:37 Europe/Berlin] Executing query: SELECT * FROM text_testimonials ORDER BY created_at DESC
