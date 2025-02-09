@@ -1,4 +1,3 @@
-// TextTestimonials.js
 import React, { useEffect, useState } from "react";
 import AlertMessage from "./AlertMessage";
 
@@ -64,21 +63,24 @@ const TextTestimonials = () => {
         method: "POST",
         body: formDataToSend,
       });
+      
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
+      
       const data = await response.json();
       if (data.success) {
         showAlert(isEditing ? "Testimonial updated successfully!" : "Testimonial added successfully!", 'success');
         setFormData({ id: "", name: "", content: "", image: null });
         setIsEditing(false);
-        fetchTestimonials();
+        await fetchTestimonials();
       } else {
-        showAlert(data.error || "Failed to save testimonial.");
+        throw new Error(data.error || "Failed to save testimonial.");
       }
     } catch (error) {
       console.error("Error submitting testimonial:", error);
-      showAlert("Failed to save testimonial. Please try again.");
+      showAlert(error.message || "Failed to save testimonial. Please try again.");
     }
   };
 
@@ -98,28 +100,35 @@ const TextTestimonials = () => {
       return;
     }
 
-    const formDataToSend = new FormData();
-    formDataToSend.append("_method", "DELETE");
-    formDataToSend.append("id", id);
-
     try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("_method", "DELETE");
+      formDataToSend.append("id", id);
+
       const response = await fetch(`${BASE_URL}/text_testimonials.php`, {
         method: "POST",
         body: formDataToSend,
       });
+
+      const data = await response.json();
+      
+      // Check both response.ok and data.success
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data = await response.json();
-      if (data.success) {
-        showAlert("Testimonial deleted successfully!", 'success');
-        fetchTestimonials();
-      } else {
-        showAlert(data.error || "Failed to delete testimonial.");
+      
+      if (!data.success) {
+        throw new Error(data.error || "Failed to delete testimonial");
       }
+
+      // If we reach here, the deletion was successful
+      showAlert("Testimonial deleted successfully!", 'success');
+      
+      // Update the local state by filtering out the deleted testimonial
+      setTestimonials(prev => prev.filter(t => t.id !== id));
     } catch (error) {
       console.error("Error deleting testimonial:", error);
-      showAlert("Failed to delete testimonial. Please try again.");
+      showAlert(error.message || "Failed to delete testimonial. Please try again.");
     }
   };
 
