@@ -1,5 +1,4 @@
 <?php
-// db.php
 ob_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -20,7 +19,19 @@ function sendJsonResponse($data, $statusCode = 200) {
 function handleError($errno, $errstr, $errfile, $errline) {
     $errorMsg = "Error [$errno]: $errstr in $errfile on line $errline";
     error_log($errorMsg);
-    sendJsonResponse(['error' => $errorMsg], 500);
+    
+    // Additional diagnostic information
+    $diagnostics = [
+        'current_user' => get_current_user(),
+        'script_owner' => function_exists('posix_getpwuid') ? 
+            (posix_getpwuid(fileowner(__FILE__))['name'] ?? 'Unknown') : 'POSIX not available',
+        'directory_permissions' => substr(sprintf('%o', fileperms(dirname(__FILE__))), -4)
+    ];
+    
+    sendJsonResponse([
+        'error' => $errorMsg,
+        'diagnostics' => $diagnostics
+    ], 500);
 }
 
 function handleException($e) {
@@ -29,41 +40,53 @@ function handleException($e) {
     sendJsonResponse(['error' => $errorMsg], 500);
 }
 
+function ensureDirectoryExists($dir) {
+    if (!file_exists($dir)) {
+        try {
+            // Create directory with minimal permissions
+            if (!mkdir($dir, 0755, true)) {
+                throw new Exception("Failed to create directory: $dir");
+            }
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+    
+    // Simple writability check
+    if (!is_writable($dir)) {
+        error_log("Directory not writable: $dir");
+        return false;
+    }
+    
+    return true;
+}
+
 function createRequiredDirectories() {
-    $baseDir = dirname(__FILE__);
+    $baseDir = dirname(__DIR__); // Go up one directory from 'pages'
     $directories = [
         $baseDir . '/uploads',
+        $baseDir . '/uploads/certificates',
         $baseDir . '/uploads/text_testimonials',
-        // Add other required directories here
     ];
 
     foreach ($directories as $dir) {
+        // Check if directory exists first
         if (!file_exists($dir)) {
-            $oldmask = umask(0);  // Remove restrictions temporarily
-            if (!@mkdir($dir, 0755, true)) {
-                $error = error_get_last();
-                error_log("Failed to create directory $dir: " . $error['message']);
-                
-                // Try to diagnose the issue
-                $parentDir = dirname($dir);
-                if (!is_writable($parentDir)) {
-                    error_log("Parent directory $parentDir is not writable");
-                    throw new Exception("Parent directory is not writable. Please ensure proper permissions.");
-                }
-            }
-            umask($oldmask);  // Restore original umask
+            // Use absolute path and full permissions
+            $fullPath = realpath($baseDir) . '/' . basename($dir);
             
-            // Set proper permissions
-            if (!chmod($dir, 0755)) {
-                error_log("Failed to set permissions for $dir");
-                throw new Exception("Failed to set directory permissions");
+            // Attempt to create with explicit full permissions
+            if (!mkdir($fullPath, 0777, true)) {
+                error_log("Failed to create directory: $fullPath");
+                throw new Exception("Failed to create directory: $fullPath");
             }
         }
-        
-        // Verify the directory is writable
+
+        // Additional writability check
         if (!is_writable($dir)) {
-            error_log("Directory $dir is not writable");
-            throw new Exception("Directory is not writable after creation");
+            error_log("Directory not writable: $dir");
+            throw new Exception("Directory not writable: $dir");
         }
     }
     

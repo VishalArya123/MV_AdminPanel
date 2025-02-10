@@ -4,8 +4,13 @@ require_once 'db.php';
 // Function to handle image upload
 function uploadCertificateImage($image) {
     $target_dir = "uploads/certificates/";
+    
+    // Ensure target directory exists
+    if (!file_exists($target_dir)) {
+        mkdir($target_dir, 0755, true);
+    }
+
     $target_file = $target_dir . basename($image["name"]);
-    $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
     // Check if image file is a actual image or fake image

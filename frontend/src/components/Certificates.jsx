@@ -1,25 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import AlertMessage from './AlertMessage';
+
+const BASE_URL = "https://backend.marichiventures.com/admin/pages";   
+const IMAGE_BASE_URL = "https://backend.marichiventures.com/admin/pages/uploads/certificates";
 
 const Certificates = () => {
     const [certificates, setCertificates] = useState([]);
     const [title, setTitle] = useState('');
     const [image, setImage] = useState(null);
     const [editingId, setEditingId] = useState(null);
+    const [alert, setAlert] = useState(null);
 
     useEffect(() => {
         AOS.init();
         fetchCertificates();
     }, []);
 
+    const showAlert = (message, type) => {
+        setAlert({ message, type });
+        setTimeout(() => setAlert(null), 3000);
+    };
+
     const fetchCertificates = async () => {
         try {
-            const response = await fetch('http://localhost/Admin-panel/Backend/pages/certificates.php');
+            const response = await fetch(`${BASE_URL}/certificates.php`);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to fetch certificates');
+            }
             const data = await response.json();
-            setCertificates(data);
+            setCertificates(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error('Error fetching certificates:', error);
+            showAlert(error.message || 'Failed to fetch certificates', 'error');
         }
     };
 
@@ -33,30 +48,39 @@ const Certificates = () => {
         }
 
         try {
+            let response;
             if (editingId) {
                 // Update existing certificate
                 formData.append('id', editingId);
                 formData.append('action', 'update');
-                await fetch('http://localhost/Admin-panel/Backend/pages/certificates.php', {
+                response = await fetch(`${BASE_URL}/certificates.php`, {
                     method: 'POST',
                     body: formData
                 });
             } else {
                 // Create new certificate
                 formData.append('action', 'create');
-                await fetch('http://localhost/Admin-panel/Backend/pages/certificates.php', {
+                response = await fetch(`${BASE_URL}/certificates.php`, {
                     method: 'POST',
                     body: formData
                 });
             }
+
+            const result = await response.json();
             
-            // Reset form and fetch updated list
-            setTitle('');
-            setImage(null);
-            setEditingId(null);
-            fetchCertificates();
+            if (result.success) {
+                showAlert(result.message, 'success');
+                // Reset form and fetch updated list
+                setTitle('');
+                setImage(null);
+                setEditingId(null);
+                fetchCertificates();
+            } else {
+                showAlert(result.message, 'error');
+            }
         } catch (error) {
             console.error('Error submitting certificate:', error);
+            showAlert('Error submitting certificate', 'error');
         }
     };
 
@@ -71,18 +95,35 @@ const Certificates = () => {
             formData.append('id', id);
             formData.append('action', 'delete');
 
-            await fetch('http://localhost/Admin-panel/Backend/pages/certificates.php', {
+            const response = await fetch(`${BASE_URL}/certificates.php`, {
                 method: 'POST',
                 body: formData
             });
-            fetchCertificates();
+
+            const result = await response.json();
+            
+            if (result.success) {
+                showAlert(result.message, 'success');
+                fetchCertificates();
+            } else {
+                showAlert(result.message, 'error');
+            }
         } catch (error) {
             console.error('Error deleting certificate:', error);
+            showAlert('Error deleting certificate', 'error');
         }
     };
 
     return (
-        <div className="container mx-auto p-6">
+        <div className="container mx-auto p-6 relative">
+            {alert && (
+                <AlertMessage 
+                    message={alert.message} 
+                    type={alert.type} 
+                    onClose={() => setAlert(null)} 
+                />
+            )}
+
             <form onSubmit={handleSubmit} className="mb-6 bg-white p-6 rounded-lg shadow-md">
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -132,34 +173,40 @@ const Certificates = () => {
             </form>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {certificates.map((cert) => (
-                    <div 
-                        key={cert.id} 
-                        data-aos="fade-up"
-                        className="bg-white rounded-lg shadow-md p-4 transition duration-300 ease-in-out transform hover:scale-105"
-                    >
-                        <img 
-                            src={`http://localhost/Admin-panel/Backend/pages/${cert.certificate_image}`} 
-                            alt={cert.certificate_title} 
-                            className="w-full h-48 object-cover rounded-md mb-4"
-                        />
-                        <h3 className="text-lg font-semibold mb-2">{cert.certificate_title}</h3>
-                        <div className="flex space-x-2">
-                            <button 
-                                onClick={() => handleEdit(cert)}
-                                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            >
-                                Edit
-                            </button>
-                            <button 
-                                onClick={() => handleDelete(cert.id)}
-                                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            >
-                                Delete
-                            </button>
+                {certificates.length > 0 ? (
+                    certificates.map((cert) => (
+                        <div 
+                            key={cert.id} 
+                            data-aos="fade-up"
+                            className="bg-white rounded-lg shadow-md p-4 transition duration-300 ease-in-out transform hover:scale-105"
+                        >
+                            <img 
+                                src={`${IMAGE_BASE_URL}/${cert.certificate_image}`} 
+                                alt={cert.certificate_title} 
+                                className="w-full h-48 object-cover rounded-md mb-4"
+                            />
+                            <h3 className="text-lg font-semibold mb-2">{cert.certificate_title}</h3>
+                            <div className="flex space-x-2">
+                                <button 
+                                    onClick={() => handleEdit(cert)}
+                                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                >
+                                    Edit
+                                </button>
+                                <button 
+                                    onClick={() => handleDelete(cert.id)}
+                                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </div>
+                    ))
+                ) : (
+                    <div className="col-span-full text-center text-gray-500">
+                        No certificates found
                     </div>
-                ))}
+                )}
             </div>
         </div>
     );
