@@ -12,6 +12,7 @@ const Certificates = () => {
     const [image, setImage] = useState(null);
     const [editingId, setEditingId] = useState(null);
     const [alert, setAlert] = useState(null);
+    const [deleteConfirmation, setDeleteConfirmation] = useState(null);
 
     useEffect(() => {
         AOS.init();
@@ -38,61 +39,20 @@ const Certificates = () => {
         }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        const formData = new FormData();
-        formData.append('title', title);
-        if (image) {
-            formData.append('image', image);
-        }
-
-        try {
-            let response;
-            if (editingId) {
-                // Update existing certificate
-                formData.append('id', editingId);
-                formData.append('action', 'update');
-                response = await fetch(`${BASE_URL}/certificates.php`, {
-                    method: 'POST',
-                    body: formData
-                });
-            } else {
-                // Create new certificate
-                formData.append('action', 'create');
-                response = await fetch(`${BASE_URL}/certificates.php`, {
-                    method: 'POST',
-                    body: formData
-                });
-            }
-
-            const result = await response.json();
-            
-            if (result.success) {
-                showAlert(result.message, 'success');
-                // Reset form and fetch updated list
-                setTitle('');
-                setImage(null);
-                setEditingId(null);
-                fetchCertificates();
-            } else {
-                showAlert(result.message, 'error');
-            }
-        } catch (error) {
-            console.error('Error submitting certificate:', error);
-            showAlert('Error submitting certificate', 'error');
-        }
+    const handleDelete = async (id, title) => {
+        // Show confirmation dialog
+        setDeleteConfirmation({
+            id,
+            title
+        });
     };
 
-    const handleEdit = (cert) => {
-        setTitle(cert.certificate_title);
-        setEditingId(cert.id);
-    };
+    const confirmDelete = async () => {
+        if (!deleteConfirmation) return;
 
-    const handleDelete = async (id) => {
         try {
             const formData = new FormData();
-            formData.append('id', id);
+            formData.append('id', deleteConfirmation.id);
             formData.append('action', 'delete');
 
             const response = await fetch(`${BASE_URL}/certificates.php`, {
@@ -108,10 +68,18 @@ const Certificates = () => {
             } else {
                 showAlert(result.message, 'error');
             }
+
+            // Clear the confirmation
+            setDeleteConfirmation(null);
         } catch (error) {
             console.error('Error deleting certificate:', error);
             showAlert('Error deleting certificate', 'error');
+            setDeleteConfirmation(null);
         }
+    };
+
+    const cancelDelete = () => {
+        setDeleteConfirmation(null);
     };
 
     return (
@@ -124,54 +92,34 @@ const Certificates = () => {
                 />
             )}
 
-            <form onSubmit={handleSubmit} className="mb-6 bg-white p-6 rounded-lg shadow-md">
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                        Certificate Title
-                    </label>
-                    <input 
-                        type="text" 
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required 
-                    />
+            {/* Delete Confirmation Modal */}
+            {deleteConfirmation && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-xl">
+                        <h2 className="text-xl font-bold mb-4">Confirm Deletion</h2>
+                        <p className="mb-4">
+                            Are you sure you want to delete the certificate 
+                            <span className="font-semibold"> "{deleteConfirmation.title}"</span>?
+                        </p>
+                        <div className="flex space-x-4 justify-end">
+                            <button 
+                                onClick={cancelDelete}
+                                className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+                            >
+                                Cancel
+                            </button>
+                            <button 
+                                onClick={confirmDelete}
+                                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                        Certificate Image
-                    </label>
-                    <input 
-                        type="file" 
-                        onChange={(e) => setImage(e.target.files[0])}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        accept="image/*"
-                        required={!editingId}
-                    />
-                </div>
-                <div className="flex space-x-4">
-                    <button 
-                        type="submit" 
-                        className={`${editingId ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-blue-500 hover:bg-blue-600'} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
-                    >
-                        {editingId ? 'Update' : 'Add'} Certificate
-                    </button>
-                    {editingId && (
-                        <button 
-                            type="button" 
-                            onClick={() => {
-                                setTitle('');
-                                setImage(null);
-                                setEditingId(null);
-                            }}
-                            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        >
-                            Cancel
-                        </button>
-                    )}
-                </div>
-            </form>
+            )}
 
+            {/* Rest of the component remains the same... */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {certificates.length > 0 ? (
                     certificates.map((cert) => (
@@ -194,7 +142,7 @@ const Certificates = () => {
                                     Edit
                                 </button>
                                 <button 
-                                    onClick={() => handleDelete(cert.id)}
+                                    onClick={() => handleDelete(cert.id, cert.certificate_title)}
                                     className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                 >
                                     Delete
