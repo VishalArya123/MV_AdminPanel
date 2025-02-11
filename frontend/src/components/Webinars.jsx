@@ -45,7 +45,12 @@ const Webinars = () => {
   const fetchWebinarGroups = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`${API_BASE_URL}/webinars.php?endpoint=groups`);
+      const response = await fetch(`${API_BASE_URL}/webinars.php?endpoint=groups`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       
@@ -66,7 +71,12 @@ const Webinars = () => {
     
     try {
       setIsLoading(true);
-      const response = await fetch(`${API_BASE_URL}/webinars.php?endpoint=webinars&group_id=${groupId}`);
+      const response = await fetch(`${API_BASE_URL}/webinars.php?endpoint=webinars&group_id=${groupId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       
@@ -94,7 +104,6 @@ const Webinars = () => {
     const formDataObj = new FormData();
     formDataObj.append('group_id', selectedGroup);
     
-    // Append all form data
     Object.keys(formData).forEach(key => {
       if (key === 'image' && formData[key] === null) return;
       formDataObj.append(key, formData[key]);
@@ -102,33 +111,16 @@ const Webinars = () => {
 
     try {
       setIsLoading(true);
-      const url = `${API_BASE_URL}/webinars.php?endpoint=webinars`;
+      const url = `${API_BASE_URL}/webinars.php?endpoint=webinars${editingWebinar ? '&id=' + editingWebinar.id : ''}`;
       
-      if (editingWebinar) {
-        formDataObj.append('id', editingWebinar.id);
-        // For PUT requests, we need to explicitly set the method and include necessary headers
-        const response = await fetch(url, {
-          method: 'POST', // Changed to POST
-          body: formDataObj,
-          headers: {
-            'X-HTTP-Method-Override': 'PUT' // Add this header to handle PUT
-          }
-        });
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formDataObj,
+      });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Network response was not ok');
-        }
-      } else {
-        const response = await fetch(url, {
-          method: 'POST',
-          body: formDataObj
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Network response was not ok');
-        }
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Network response was not ok');
       }
       
       const result = await response.json();
@@ -138,7 +130,7 @@ const Webinars = () => {
       }
 
       showAlert(`Webinar ${editingWebinar ? 'updated' : 'added'} successfully`, 'success');
-      fetchWebinars(selectedGroup);
+      await fetchWebinars(selectedGroup); // Await the fetch
       setIsDialogOpen(false);
       resetForm();
     } catch (error) {
@@ -314,7 +306,7 @@ const Webinars = () => {
       )}
 
       {isDialogOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div
             className="bg-white rounded-lg max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto"
             data-aos="zoom-in"
