@@ -14,6 +14,7 @@ const Webinars = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingWebinar, setEditingWebinar] = useState(null);
   const [alert, setAlert] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   
   const [formData, setFormData] = useState({
     title: '',
@@ -25,7 +26,7 @@ const Webinars = () => {
     speaker: '',
     registration_link: '',
     image: null,
-    image_path: '' // Added to handle existing image paths
+    image_path: ''
   });
 
   useEffect(() => {
@@ -36,43 +37,70 @@ const Webinars = () => {
   useEffect(() => {
     if (selectedGroup) {
       fetchWebinars(selectedGroup);
+    } else {
+      setWebinars([]);
     }
   }, [selectedGroup]);
 
   const fetchWebinarGroups = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(`${API_BASE_URL}/webinars.php?endpoint=groups`);
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
       setWebinarGroups(data);
     } catch (error) {
-      showAlert('Failed to fetch webinar groups', 'error');
+      showAlert('Failed to fetch webinar groups: ' + error.message, 'error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const fetchWebinars = async (groupId) => {
+    if (!groupId) return;
+    
     try {
+      setIsLoading(true);
       const response = await fetch(`${API_BASE_URL}/webinars.php?endpoint=webinars&group_id=${groupId}`);
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
       setWebinars(data);
     } catch (error) {
-      showAlert('Failed to fetch webinars', 'error');
+      showAlert('Failed to fetch webinars: ' + error.message, 'error');
+      setWebinars([]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formDataObj = new FormData();
     
-    // Handle all form fields including the image_path for updates
+    if (!selectedGroup) {
+      showAlert('Please select a webinar group first', 'error');
+      return;
+    }
+
+    const formDataObj = new FormData();
+    formDataObj.append('group_id', selectedGroup);
+    
     Object.keys(formData).forEach(key => {
       if (key === 'image' && formData[key] === null) return;
       formDataObj.append(key, formData[key]);
     });
-    formDataObj.append('group_id', selectedGroup);
 
     try {
+      setIsLoading(true);
       const url = `${API_BASE_URL}/webinars.php?endpoint=webinars`;
       const method = editingWebinar ? 'PUT' : 'POST';
       if (editingWebinar) {
@@ -84,7 +112,11 @@ const Webinars = () => {
         body: formDataObj
       });
 
-      if (!response.ok) throw new Error('Network response was not ok');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Network response was not ok');
+      }
+      
       const result = await response.json();
 
       if (result.error) {
@@ -97,28 +129,37 @@ const Webinars = () => {
       resetForm();
     } catch (error) {
       showAlert(error.message || 'Failed to save webinar', 'error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this webinar?')) {
-      try {
-        const response = await fetch(`${API_BASE_URL}/webinars.php?endpoint=webinars&id=${id}`, {
-          method: 'DELETE'
-        });
+    if (!window.confirm('Are you sure you want to delete this webinar?')) return;
+    
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${API_BASE_URL}/webinars.php?endpoint=webinars&id=${id}`, {
+        method: 'DELETE'
+      });
 
-        if (!response.ok) throw new Error('Network response was not ok');
-        const result = await response.json();
-
-        if (result.error) {
-          throw new Error(result.error);
-        }
-
-        showAlert('Webinar deleted successfully', 'success');
-        fetchWebinars(selectedGroup);
-      } catch (error) {
-        showAlert(error.message || 'Failed to delete webinar', 'error');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Network response was not ok');
       }
+      
+      const result = await response.json();
+
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
+      showAlert('Webinar deleted successfully', 'success');
+      fetchWebinars(selectedGroup);
+    } catch (error) {
+      showAlert(error.message || 'Failed to delete webinar', 'error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
