@@ -5,7 +5,6 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 const API_BASE_URL = 'https://backend.marichiventures.com/admin/pages';
-// const API_BASE_URL = 'https://localhost/Admin-Panel/Backend/pages';
 const IMAGE_BASE_URL = `${API_BASE_URL}/uploads/webinars`;
 
 const Webinars = () => {
@@ -25,7 +24,8 @@ const Webinars = () => {
     status: 'upcoming',
     speaker: '',
     registration_link: '',
-    image: null
+    image: null,
+    image_path: '' // Added to handle existing image paths
   });
 
   useEffect(() => {
@@ -42,6 +42,7 @@ const Webinars = () => {
   const fetchWebinarGroups = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/webinars.php?endpoint=groups`);
+      if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       setWebinarGroups(data);
     } catch (error) {
@@ -52,6 +53,7 @@ const Webinars = () => {
   const fetchWebinars = async (groupId) => {
     try {
       const response = await fetch(`${API_BASE_URL}/webinars.php?endpoint=webinars&group_id=${groupId}`);
+      if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       setWebinars(data);
     } catch (error) {
@@ -62,13 +64,16 @@ const Webinars = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formDataObj = new FormData();
+    
+    // Handle all form fields including the image_path for updates
     Object.keys(formData).forEach(key => {
+      if (key === 'image' && formData[key] === null) return;
       formDataObj.append(key, formData[key]);
     });
     formDataObj.append('group_id', selectedGroup);
 
     try {
-      const url = `${API_BASE_URL}/webinars.php`;
+      const url = `${API_BASE_URL}/webinars.php?endpoint=webinars`;
       const method = editingWebinar ? 'PUT' : 'POST';
       if (editingWebinar) {
         formDataObj.append('id', editingWebinar.id);
@@ -79,30 +84,40 @@ const Webinars = () => {
         body: formDataObj
       });
 
-      if (response.ok) {
-        showAlert(`Webinar ${editingWebinar ? 'updated' : 'added'} successfully`, 'success');
-        fetchWebinars(selectedGroup);
-        setIsDialogOpen(false);
-        resetForm();
+      if (!response.ok) throw new Error('Network response was not ok');
+      const result = await response.json();
+
+      if (result.error) {
+        throw new Error(result.error);
       }
+
+      showAlert(`Webinar ${editingWebinar ? 'updated' : 'added'} successfully`, 'success');
+      fetchWebinars(selectedGroup);
+      setIsDialogOpen(false);
+      resetForm();
     } catch (error) {
-      showAlert('Failed to save webinar', 'error');
+      showAlert(error.message || 'Failed to save webinar', 'error');
     }
   };
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this webinar?')) {
       try {
-        const response = await fetch(`${API_BASE_URL}/webinars.php?id=${id}`, {
+        const response = await fetch(`${API_BASE_URL}/webinars.php?endpoint=webinars&id=${id}`, {
           method: 'DELETE'
         });
 
-        if (response.ok) {
-          showAlert('Webinar deleted successfully', 'success');
-          fetchWebinars(selectedGroup);
+        if (!response.ok) throw new Error('Network response was not ok');
+        const result = await response.json();
+
+        if (result.error) {
+          throw new Error(result.error);
         }
+
+        showAlert('Webinar deleted successfully', 'success');
+        fetchWebinars(selectedGroup);
       } catch (error) {
-        showAlert('Failed to delete webinar', 'error');
+        showAlert(error.message || 'Failed to delete webinar', 'error');
       }
     }
   };
@@ -122,7 +137,8 @@ const Webinars = () => {
       status: 'upcoming',
       speaker: '',
       registration_link: '',
-      image: null
+      image: null,
+      image_path: ''
     });
     setEditingWebinar(null);
   };
@@ -179,6 +195,13 @@ const Webinars = () => {
                   <td className="p-4">
                     <div className="font-medium">{webinar.title}</div>
                     <div className="text-sm text-gray-600">{webinar.description}</div>
+                    {webinar.image_path && (
+                      <img 
+                        src={`${IMAGE_BASE_URL}/${webinar.image_path}`}
+                        alt={webinar.title}
+                        className="mt-2 w-24 h-24 object-cover rounded"
+                      />
+                    )}
                   </td>
                   <td className="p-4">
                     <div className="flex flex-col gap-1">
@@ -210,7 +233,10 @@ const Webinars = () => {
                       <button
                         onClick={() => {
                           setEditingWebinar(webinar);
-                          setFormData(webinar);
+                          setFormData({
+                            ...webinar,
+                            image: null // Reset image field for editing
+                          });
                           setIsDialogOpen(true);
                         }}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
@@ -333,6 +359,15 @@ const Webinars = () => {
 
               <div>
                 <label className="block text-sm font-medium mb-1">Image</label>
+                {editingWebinar && formData.image_path && (
+                  <div className="mb-2">
+                    <img 
+                      src={`${IMAGE_BASE_URL}/${formData.image_path}`}
+                      alt="Current webinar image"
+                      className="w-24 h-24 object-cover rounded"
+                    />
+                  </div>
+                )}
                 <input
                   type="file"
                   onChange={(e) => setFormData({...formData, image: e.target.files[0]})}
@@ -363,8 +398,8 @@ const Webinars = () => {
           </div>
         </div>
       )}
-      </div>
-      );
-      };
+    </div>
+  );
+};
 
-      export default Webinars;
+export default Webinars;
