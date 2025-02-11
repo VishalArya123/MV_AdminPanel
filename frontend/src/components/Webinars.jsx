@@ -260,7 +260,10 @@ const Webinars = () => {
 
       {isDialogOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-2xl w-full p-6" data-aos="zoom-in">
+          <div
+            className="bg-white rounded-lg max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto"
+            data-aos="zoom-in"
+          >
             <h2 className="text-2xl font-semibold mb-4">
               {editingWebinar ? 'Edit Webinar' : 'Add New Webinar'}
             </h2>
@@ -270,7 +273,9 @@ const Webinars = () => {
                 <input
                   type="text"
                   value={formData.title}
-                  onChange={(e) => setFormData({...formData, title: e.target.value})}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
                   className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   required
                 />
@@ -280,7 +285,9 @@ const Webinars = () => {
                 <label className="block text-sm font-medium mb-1">Description</label>
                 <textarea
                   value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
                   className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 h-32"
                   required
                 />
@@ -292,7 +299,9 @@ const Webinars = () => {
                   <input
                     type="date"
                     value={formData.date}
-                    onChange={(e) => setFormData({...formData, date: e.target.value})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, date: e.target.value })
+                    }
                     className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                     required
                   />
@@ -303,7 +312,9 @@ const Webinars = () => {
                   <input
                     type="time"
                     value={formData.time}
-                    onChange={(e) => setFormData({...formData, time: e.target.value})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, time: e.target.value })
+                    }
                     className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                     required
                   />
@@ -316,7 +327,9 @@ const Webinars = () => {
                   <input
                     type="text"
                     value={formData.duration}
-                    onChange={(e) => setFormData({...formData, duration: e.target.value})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, duration: e.target.value })
+                    }
                     className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                     placeholder="e.g., 1 hour"
                     required
@@ -327,7 +340,9 @@ const Webinars = () => {
                   <label className="block text-sm font-medium mb-1">Status</label>
                   <select
                     value={formData.status}
-                    onChange={(e) => setFormData({...formData, status: e.target.value})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, status: e.target.value })
+                    }
                     className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="upcoming">Upcoming</option>
@@ -341,7 +356,9 @@ const Webinars = () => {
                 <input
                   type="text"
                   value={formData.speaker}
-                  onChange={(e) => setFormData({...formData, speaker: e.target.value})}
+                  onChange={(e) =>
+                    setFormData({ ...formData, speaker: e.target.value })
+                  }
                   className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -351,7 +368,9 @@ const Webinars = () => {
                 <input
                   type="url"
                   value={formData.registration_link}
-                  onChange={(e) => setFormData({...formData, registration_link: e.target.value})}
+                  onChange={(e) =>
+                    setFormData({ ...formData, registration_link: e.target.value })
+                  }
                   className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   required
                 />
@@ -361,7 +380,7 @@ const Webinars = () => {
                 <label className="block text-sm font-medium mb-1">Image</label>
                 {editingWebinar && formData.image_path && (
                   <div className="mb-2">
-                    <img 
+                    <img
                       src={`${IMAGE_BASE_URL}/${formData.image_path}`}
                       alt="Current webinar image"
                       className="w-24 h-24 object-cover rounded"
@@ -370,7 +389,9 @@ const Webinars = () => {
                 )}
                 <input
                   type="file"
-                  onChange={(e) => setFormData({...formData, image: e.target.files[0]})}
+                  onChange={(e) =>
+                    setFormData({ ...formData, image: e.target.files[0] })
+                  }
                   className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   accept="image/*"
                 />
@@ -389,15 +410,16 @@ const Webinars = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
                 >
-                  {editingWebinar ? 'Update' : 'Add'} Webinar
+                  Save
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
+
     </div>
   );
 };
