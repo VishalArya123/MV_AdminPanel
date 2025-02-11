@@ -94,6 +94,7 @@ const Webinars = () => {
     const formDataObj = new FormData();
     formDataObj.append('group_id', selectedGroup);
     
+    // Append all form data
     Object.keys(formData).forEach(key => {
       if (key === 'image' && formData[key] === null) return;
       formDataObj.append(key, formData[key]);
@@ -102,19 +103,32 @@ const Webinars = () => {
     try {
       setIsLoading(true);
       const url = `${API_BASE_URL}/webinars.php?endpoint=webinars`;
-      const method = editingWebinar ? 'PUT' : 'POST';
+      
       if (editingWebinar) {
         formDataObj.append('id', editingWebinar.id);
-      }
+        // For PUT requests, we need to explicitly set the method and include necessary headers
+        const response = await fetch(url, {
+          method: 'POST', // Changed to POST
+          body: formDataObj,
+          headers: {
+            'X-HTTP-Method-Override': 'PUT' // Add this header to handle PUT
+          }
+        });
 
-      const response = await fetch(url, {
-        method,
-        body: formDataObj
-      });
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Network response was not ok');
+        }
+      } else {
+        const response = await fetch(url, {
+          method: 'POST',
+          body: formDataObj
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Network response was not ok');
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Network response was not ok');
+        }
       }
       
       const result = await response.json();
