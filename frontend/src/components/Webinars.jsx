@@ -41,7 +41,7 @@ const Webinars = () => {
 
   const fetchWebinarGroups = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/groups`);
+      const response = await fetch(`${API_BASE_URL}/webinars.php?endpoint=groups`);
       const data = await response.json();
       setWebinarGroups(data);
     } catch (error) {
@@ -51,7 +51,7 @@ const Webinars = () => {
 
   const fetchWebinars = async (groupId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/webinars.php?group_id=${groupId}`);
+      const response = await fetch(`${API_BASE_URL}/webinars.php?endpoint=webinars&group_id=${groupId}`);
       const data = await response.json();
       setWebinars(data);
     } catch (error) {
