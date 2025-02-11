@@ -2,30 +2,22 @@
 // text_testimonials.php
 require_once 'db.php';
 
-// Add CORS headers for all origins
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE, PUT');
 header('Access-Control-Allow-Headers: Content-Type, X-Requested-With, Authorization, _method');
-header('Access-Control-Max-Age: 86400'); // 24 hours cache
+header('Access-Control-Max-Age: 86400');
 
-// Define upload directory constants
-define('BASE_DIR', dirname(__FILE__));
-define('UPLOAD_DIR', BASE_DIR . '/uploads/text_testimonials');
+define('UPLOAD_DIR', 'uploads/text_testimonials');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    // Handle preflight requests
     http_response_code(200);
     exit();
 }
 
 try {
-    error_log("Request Method: " . $_SERVER['REQUEST_METHOD']);
-    
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
             $sql = "SELECT * FROM text_testimonials ORDER BY created_at DESC";
-            error_log("Executing query: " . $sql);
-            
             $result = $conn->query($sql);
             if (!$result) {
                 throw new Exception("Query failed: " . $conn->error);
@@ -33,9 +25,6 @@ try {
             
             $testimonials = [];
             while ($row = $result->fetch_assoc()) {
-                if (!empty($row['image'])) {
-                    $row['image'] = str_replace('\\', '/', $row['image']);
-                }
                 $testimonials[] = $row;
             }
             
@@ -44,8 +33,8 @@ try {
 
         case 'POST':
             if (isset($_POST['_method']) && $_POST['_method'] === 'DELETE') {
-                handleDelete($conn);
-                sendJsonResponse(['success' => true]);
+                $result = handleDelete($conn);
+                sendJsonResponse(['success' => $result]);  // Explicitly send JSON response
             } else {
                 $name = $conn->real_escape_string($_POST['name']);
                 $content = $conn->real_escape_string($_POST['content']);
@@ -64,14 +53,16 @@ try {
                     
                     $fileExt = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
                     $newFileName = uniqid() . '.' . $fileExt;
-                    $uploadPath = UPLOAD_DIR . '/' . $newFileName;
                     
-                    if (!move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
-                        error_log("Upload failed: " . error_get_last()['message']);
+                    if (!is_dir(UPLOAD_DIR)) {
+                        mkdir(UPLOAD_DIR, 0777, true);
+                    }
+                    
+                    if (!move_uploaded_file($_FILES['image']['tmp_name'], UPLOAD_DIR . '/' . $newFileName)) {
                         throw new Exception('Failed to upload file.');
                     }
                     
-                    $image = 'uploads/text_testimonials/' . $newFileName;
+                    $image = $newFileName; // Store only the filename
                 }
                 
                 if (isset($_POST['id'])) {
@@ -92,25 +83,54 @@ try {
     sendJsonResponse(['error' => $e->getMessage()], 500);
 }
 
-// Helper functions remain the same
 function handleDelete($conn) {
     $id = $conn->real_escape_string($_POST['id']);
+    
+    // Get the image filename before deleting the record
+    $stmt = $conn->prepare("SELECT image FROM text_testimonials WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        if (!empty($row['image'])) {
+            $imagePath = UPLOAD_DIR . '/' . $row['image'];
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+    }
+    
     $stmt = $conn->prepare("DELETE FROM text_testimonials WHERE id = ?");
     $stmt->bind_param("i", $id);
     if (!$stmt->execute()) {
-        throw new Exception("Delete failed: " . $stmt->error);
+        return false;  // Return false if delete fails
     }
+    
+    return true;  // Return true if delete is successful
 }
 
 function handleUpdate($conn, $id, $name, $content, $image) {
-    $sql = $image ? 
-        "UPDATE text_testimonials SET name=?, content=?, image=? WHERE id=?" :
-        "UPDATE text_testimonials SET name=?, content=? WHERE id=?";
-    
-    $stmt = $conn->prepare($sql);
     if ($image) {
+        // Get the old image filename
+        $stmt = $conn->prepare("SELECT image FROM text_testimonials WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            if (!empty($row['image'])) {
+                $oldImagePath = UPLOAD_DIR . '/' . $row['image'];
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
+        }
+        
+        $sql = "UPDATE text_testimonials SET name=?, content=?, image=? WHERE id=?";
+        $stmt = $conn->prepare($sql);
         $stmt->bind_param("sssi", $name, $content, $image, $id);
     } else {
+        $sql = "UPDATE text_testimonials SET name=?, content=? WHERE id=?";
+        $stmt = $conn->prepare($sql);
         $stmt->bind_param("ssi", $name, $content, $id);
     }
     

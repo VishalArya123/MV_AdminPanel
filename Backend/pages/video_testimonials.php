@@ -1,16 +1,21 @@
 <?php
+// video_testimonials.php
 require_once 'db.php';
+
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE, PUT');
+header('Access-Control-Allow-Headers: Content-Type, X-Requested-With, Authorization, _method');
+header('Access-Control-Max-Age: 86400');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     sendJsonResponse(['status' => 'ok']);
+    exit();
 }
 
 try {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
             $sql = "SELECT * FROM video_testimonials ORDER BY created_at DESC";
-            error_log("Executing query: " . $sql);
-            
             $result = $conn->query($sql);
             if (!$result) {
                 throw new Exception("Query failed: " . $conn->error);

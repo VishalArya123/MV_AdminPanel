@@ -1,13 +1,31 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Handle OPTIONS preflight request
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit(0);
+}
+
 require_once 'db.php';
+
+// Define upload directory
+define('UPLOAD_DIR', 'uploads/certificates');
 
 // Function to handle image upload
 function uploadCertificateImage($image) {
-    $target_dir = "uploads/certificates/";
+    $target_dir = UPLOAD_DIR . "/";
     
     // Ensure target directory exists
     if (!file_exists($target_dir)) {
         mkdir($target_dir, 0755, true);
+    }
+
+    // Validate file upload
+    if (!$image || $image['error'] !== UPLOAD_ERR_OK) {
+        return ["success" => false, "message" => "Invalid file upload"];
     }
 
     $target_file = $target_dir . basename($image["name"]);
@@ -19,7 +37,7 @@ function uploadCertificateImage($image) {
         return ["success" => false, "message" => "File is not an image."];
     }
 
-    // Check file size
+    // Check file size (500KB max)
     if ($image["size"] > 500000) {
         return ["success" => false, "message" => "Sorry, your file is too large."];
     }
@@ -39,7 +57,7 @@ function uploadCertificateImage($image) {
         return [
             "success" => true, 
             "message" => "File uploaded successfully", 
-            "filepath" => $target_file
+            "filepath" => $unique_filename
         ];
     } else {
         return ["success" => false, "message" => "Sorry, there was an error uploading your file."];
@@ -48,6 +66,14 @@ function uploadCertificateImage($image) {
 
 // Function to create a new certificate
 function createCertificate($conn, $title, $image) {
+    // Validate input
+    if (empty($title)) {
+        return ["success" => false, "message" => "Certificate title cannot be empty"];
+    }
+
+    // Sanitize title
+    $title = htmlspecialchars(trim($title), ENT_QUOTES, 'UTF-8');
+
     // Upload image first
     $upload_result = uploadCertificateImage($image);
     
@@ -61,10 +87,16 @@ function createCertificate($conn, $title, $image) {
     $stmt->bind_param("ss", $title, $upload_result['filepath']);
     
     // Execute the statement
-    if ($stmt->execute()) {
-        return ["success" => true, "message" => "Certificate added successfully"];
-    } else {
-        return ["success" => false, "message" => "Error adding certificate to database"];
+    try {
+        if ($stmt->execute()) {
+            return ["success" => true, "message" => "Certificate added successfully"];
+        } else {
+            error_log("Database insert error: " . $stmt->error);
+            return ["success" => false, "message" => "Error adding certificate to database"];
+        }
+    } catch (Exception $e) {
+        error_log("Exception in createCertificate: " . $e->getMessage());
+        return ["success" => false, "message" => "Unexpected error occurred"];
     }
 }
 
@@ -84,6 +116,14 @@ function getAllCertificates($conn) {
 
 // Function to update a certificate
 function updateCertificate($conn, $id, $title, $image = null) {
+    // Validate input
+    if (empty($title)) {
+        return ["success" => false, "message" => "Certificate title cannot be empty"];
+    }
+
+    // Sanitize title
+    $title = htmlspecialchars(trim($title), ENT_QUOTES, 'UTF-8');
+
     if ($image) {
         // Upload new image
         $upload_result = uploadCertificateImage($image);
@@ -104,10 +144,16 @@ function updateCertificate($conn, $id, $title, $image = null) {
     }
     
     // Execute the statement
-    if ($stmt->execute()) {
-        return ["success" => true, "message" => "Certificate updated successfully"];
-    } else {
-        return ["success" => false, "message" => "Error updating certificate"];
+    try {
+        if ($stmt->execute()) {
+            return ["success" => true, "message" => "Certificate updated successfully"];
+        } else {
+            error_log("Database update error: " . $stmt->error);
+            return ["success" => false, "message" => "Error updating certificate"];
+        }
+    } catch (Exception $e) {
+        error_log("Exception in updateCertificate: " . $e->getMessage());
+        return ["success" => false, "message" => "Unexpected error occurred"];
     }
 }
 
@@ -122,8 +168,9 @@ function deleteCertificate($conn, $id) {
     
     if ($row = $result->fetch_assoc()) {
         // Delete the image file
-        if (file_exists($row['certificate_image'])) {
-            unlink($row['certificate_image']);
+        $image_path = UPLOAD_DIR . '/' . $row['certificate_image'];
+        if (file_exists($image_path)) {
+            unlink($image_path);
         }
     }
 
@@ -132,10 +179,16 @@ function deleteCertificate($conn, $id) {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
     
-    if ($stmt->execute()) {
-        return ["success" => true, "message" => "Certificate deleted successfully"];
-    } else {
-        return ["success" => false, "message" => "Error deleting certificate"];
+    try {
+        if ($stmt->execute()) {
+            return ["success" => true, "message" => "Certificate deleted successfully"];
+        } else {
+            error_log("Database delete error: " . $stmt->error);
+            return ["success" => false, "message" => "Error deleting certificate"];
+        }
+    } catch (Exception $e) {
+        error_log("Exception in deleteCertificate: " . $e->getMessage());
+        return ["success" => false, "message" => "Unexpected error occurred"];
     }
 }
 
