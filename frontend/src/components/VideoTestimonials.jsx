@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Plus, Edit2, Trash2} from 'lucide-react';
+import { Plus, Edit2, Trash2 } from "lucide-react";
 import AlertMessage from "./AlertMessage";
 
 const VideoTestimonials = () => {
@@ -131,6 +131,13 @@ const VideoTestimonials = () => {
     }
   };
 
+  const getEmbedUrl = (videoUrl) => {
+    if (videoUrl.includes("/shorts/")) {
+      return videoUrl.replace("/shorts/", "/embed/");
+    }
+    return videoUrl; // Return the original URL if no transformation is needed
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-[#F5F7FA] to-[#B8C6DB] p-6">
@@ -209,12 +216,13 @@ const VideoTestimonials = () => {
             <h3 className="text-xl font-semibold mb-2">{testimonial.name}</h3>
             <p className="text-gray-600 mb-4">{testimonial.description}</p>
             <div className="relative pt-[56.25%]">
-              <video
-                src={testimonial.videoUrl}
-                controls
-                preload="metadata"
+              <iframe
+                src={getEmbedUrl(testimonial.videoUrl)}
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
                 className="absolute top-0 left-0 w-full h-full rounded-lg"
-              ></video>
+              ></iframe>
             </div>
             <div className="mt-4 flex justify-between">
               <button
