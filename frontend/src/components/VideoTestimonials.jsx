@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Plus, Edit2, Trash2} from 'lucide-react';
 import AlertMessage from "./AlertMessage";
 
 const VideoTestimonials = () => {
@@ -183,8 +184,9 @@ const VideoTestimonials = () => {
           <div className="flex gap-4">
             <button
               type="submit"
-              className="flex-1 bg-gradient-to-r from-[#2563eb] to-[#3b82f6] text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all"
+              className="flex items-center justify-center gap-2 flex-1 bg-gradient-to-r from-[#2563eb] to-[#3b82f6] text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all"
             >
+              <Plus size={18} />
               {isEditing ? "Update Testimonial" : "Add Testimonial"}
             </button>
             <button
@@ -219,13 +221,13 @@ const VideoTestimonials = () => {
                 onClick={() => handleEdit(testimonial)}
                 className="text-blue-500 hover:underline"
               >
-                Edit
+                <Edit2 size={18} />
               </button>
               <button
                 onClick={() => handleDelete(testimonial.id, testimonial.name)}
                 className="text-red-500 hover:underline"
               >
-                Delete
+                <Trash2 size={18} />
               </button>
             </div>
           </div>
