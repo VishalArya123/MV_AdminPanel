@@ -1,23 +1,23 @@
-// VideoTestimonials.js
 import React, { useEffect, useState } from "react";
 import AlertMessage from "./AlertMessage";
 
 const VideoTestimonials = () => {
   const BASE_URL = "https://backend.marichiventures.com/admin/pages";
-  
+
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [formData, setFormData] = useState({
+  const initialFormState = {
     id: "",
     name: "",
     description: "",
     videoUrl: "",
-  });
+  };
+  const [formData, setFormData] = useState(initialFormState);
   const [isEditing, setIsEditing] = useState(false);
   const [alert, setAlert] = useState(null);
 
-  const showAlert = (message, type = 'error') => {
+  const showAlert = (message, type = "error") => {
     setAlert({ message, type });
     setTimeout(() => setAlert(null), 3000);
   };
@@ -48,7 +48,7 @@ const VideoTestimonials = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
-    Object.keys(formData).forEach(key => {
+    Object.keys(formData).forEach((key) => {
       if (formData[key]) {
         formDataToSend.append(key, formData[key]);
       }
@@ -64,9 +64,13 @@ const VideoTestimonials = () => {
       }
       const data = await response.json();
       if (data.success) {
-        showAlert(isEditing ? "Video testimonial updated successfully!" : "Video testimonial added successfully!", 'success');
-        setFormData({ id: "", name: "", description: "", videoUrl: "" });
-        setIsEditing(false);
+        showAlert(
+          isEditing
+            ? "Video testimonial updated successfully!"
+            : "Video testimonial added successfully!",
+          "success"
+        );
+        handleCancel();
         fetchTestimonials();
       } else {
         showAlert(data.error || "Failed to save video testimonial.");
@@ -75,6 +79,11 @@ const VideoTestimonials = () => {
       console.error("Error submitting testimonial:", error);
       showAlert("Failed to save video testimonial. Please try again.");
     }
+  };
+
+  const handleCancel = () => {
+    setFormData(initialFormState);
+    setIsEditing(false);
   };
 
   const handleEdit = (testimonial) => {
@@ -88,7 +97,11 @@ const VideoTestimonials = () => {
   };
 
   const handleDelete = async (id, name) => {
-    if (!window.confirm(`Are you sure you want to delete the video testimonial from ${name}?`)) {
+    if (
+      !window.confirm(
+        `Are you sure you want to delete the video testimonial from ${name}?`
+      )
+    ) {
       return;
     }
 
@@ -106,7 +119,7 @@ const VideoTestimonials = () => {
       }
       const data = await response.json();
       if (data.success) {
-        showAlert("Video testimonial deleted successfully!", 'success');
+        showAlert("Video testimonial deleted successfully!", "success");
         fetchTestimonials();
       } else {
         showAlert(data.error || "Failed to delete video testimonial.");
@@ -119,16 +132,18 @@ const VideoTestimonials = () => {
 
   if (loading) {
     return (
-      <div className="p-4">
-        <h2 className="text-xl font-bold mb-4">Video Testimonials</h2>
-        <div className="text-center">Loading...</div>
+      <div className="min-h-screen bg-gradient-to-b from-[#F5F7FA] to-[#B8C6DB] p-6">
+        <h2 className="text-3xl font-bold mb-6 text-[#2A2A2A]">Video Testimonials</h2>
+        <div className="flex justify-center items-center">
+          <div className="animate-spin h-8 w-8 border-4 border-t-[#2563eb] rounded-full"></div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Video Testimonials</h2>
+    <div className="min-h-screen bg-gradient-to-b from-[#F5F7FA] to-[#B8C6DB] p-6">
+      <h2 className="text-3xl font-bold mb-6 text-[#2A2A2A]">Video Testimonials</h2>
 
       {alert && (
         <AlertMessage
@@ -138,114 +153,83 @@ const VideoTestimonials = () => {
         />
       )}
 
-      <form onSubmit={handleSubmit} className="mb-6">
-        <div className="mb-2">
-          <label className="block mb-1">Name:</label>
+      <form onSubmit={handleSubmit} className="mb-8 bg-white p-6 rounded-2xl shadow-md">
+        <div className="grid gap-4">
           <input
             type="text"
-            className="w-full p-2 border rounded"
+            placeholder="Name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
             required
           />
-        </div>
-        <div className="mb-2">
-          <label className="block mb-1">Description:</label>
           <textarea
-            className="w-full p-2 border rounded"
+            placeholder="Description"
             value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+            className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
             required
-          ></textarea>
-        </div>
-        <div className="mb-2">
-          <label className="block mb-1">Video URL:</label>
+          />
           <input
             type="url"
-            className="w-full p-2 border rounded"
+            placeholder="Video URL"
             value={formData.videoUrl}
             onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+            className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
             required
-            placeholder="https://example.com/video"
           />
-        </div>
-        <div className="flex gap-2">
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            {isEditing ? "Update" : "Add"} Testimonial
-          </button>
-          {isEditing && (
+          <div className="flex gap-4">
+            <button
+              type="submit"
+              className="flex-1 bg-gradient-to-r from-[#2563eb] to-[#3b82f6] text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all"
+            >
+              {isEditing ? "Update Testimonial" : "Add Testimonial"}
+            </button>
             <button
               type="button"
-              onClick={() => {
-                setFormData({ id: "", name: "", description: "", videoUrl: "" });
-                setIsEditing(false);
-              }}
-              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+              onClick={handleCancel}
+              className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-300 transition-all"
             >
               Cancel
             </button>
-          )}
+          </div>
         </div>
       </form>
 
-      <div>
-        {testimonials.length === 0 ? (
-          <p className="text-gray-500">No testimonials found.</p>
-        ) : (
-          testimonials.map((testimonial) => (
-            <div
-              key={testimonial.id}
-              className="p-4 mb-4 border rounded shadow flex items-start justify-between"
-            >
-              <div className="flex-1">
-                <h3 className="font-bold">{testimonial.name}</h3>
-                <p className="text-gray-600 mt-1">{testimonial.description}</p>
-                {testimonial.videoUrl && (
-                  <div className="mt-2">
-                    <a
-                      href={testimonial.videoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-blue-500 hover:text-blue-700"
-                    >
-                      <span>Watch Video</span>
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                    </a>
-                  </div>
-                )}
-              </div>
-              <div className="ml-4 flex gap-2">
-                <button
-                  className="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                  onClick={() => handleEdit(testimonial)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                  onClick={() => handleDelete(testimonial.id, testimonial.name)}
-                >
-                  Delete
-                </button>
-              </div>
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {testimonials.map((testimonial) => (
+          <div
+            key={testimonial.id}
+            className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all"
+          >
+            <h3 className="text-xl font-semibold mb-2">{testimonial.name}</h3>
+            <p className="text-gray-600 mb-4">{testimonial.description}</p>
+            <div className="relative pt-[56.25%]">
+              <video
+                src={testimonial.videoUrl}
+                controls
+                preload="metadata"
+                className="absolute top-0 left-0 w-full h-full rounded-lg"
+              ></video>
             </div>
-          ))
-        )}
+            <div className="mt-4 flex justify-between">
+              <button
+                onClick={() => handleEdit(testimonial)}
+                className="text-blue-500 hover:underline"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(testimonial.id, testimonial.name)}
+                className="text-red-500 hover:underline"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
