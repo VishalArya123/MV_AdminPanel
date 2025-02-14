@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Edit2, Trash2, Plus } from "lucide-react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import AlertMessage from './AlertMessage';
@@ -12,7 +13,7 @@ const Certificates = () => {
     const [image, setImage] = useState(null);
     const [editingId, setEditingId] = useState(null);
     const [alert, setAlert] = useState(null);
-    const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         AOS.init();
@@ -25,6 +26,7 @@ const Certificates = () => {
     };
 
     const fetchCertificates = async () => {
+        setLoading(true);
         try {
             const response = await fetch(`${BASE_URL}/certificates.php`);
             if (!response.ok) {
@@ -36,6 +38,8 @@ const Certificates = () => {
         } catch (error) {
             console.error('Error fetching certificates:', error);
             showAlert(error.message || 'Failed to fetch certificates', 'error');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -51,7 +55,6 @@ const Certificates = () => {
         try {
             let response;
             if (editingId) {
-                // Update existing certificate
                 formData.append('id', editingId);
                 formData.append('action', 'update');
                 response = await fetch(`${BASE_URL}/certificates.php`, {
@@ -59,7 +62,6 @@ const Certificates = () => {
                     body: formData
                 });
             } else {
-                // Create new certificate
                 formData.append('action', 'create');
                 response = await fetch(`${BASE_URL}/certificates.php`, {
                     method: 'POST',
@@ -71,7 +73,6 @@ const Certificates = () => {
             
             if (result.success) {
                 showAlert(result.message, 'success');
-                // Reset form and fetch updated list
                 setTitle('');
                 setImage(null);
                 setEditingId(null);
@@ -90,12 +91,10 @@ const Certificates = () => {
         setEditingId(cert.id);
     };
 
-    const handleDeleteConfirm = async () => {
-        if (!deleteConfirmId) return;
-
+    const handleDelete = async (id) => {
         try {
             const formData = new FormData();
-            formData.append('id', deleteConfirmId);
+            formData.append('id', id);
             formData.append('action', 'delete');
 
             const response = await fetch(`${BASE_URL}/certificates.php`, {
@@ -114,17 +113,24 @@ const Certificates = () => {
         } catch (error) {
             console.error('Error deleting certificate:', error);
             showAlert('Error deleting certificate', 'error');
-        } finally {
-            setDeleteConfirmId(null);
         }
     };
 
-    const handleDeleteRequest = (id) => {
-        setDeleteConfirmId(id);
-    };
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gradient-to-b from-[#F5F7FA] to-[#B8C6DB] p-6">
+                <h2 className="text-3xl font-bold mb-6 text-[#2A2A2A]">Certificates</h2>
+                <div className="flex justify-center items-center">
+                    <div className="animate-spin h-8 w-8 border-4 border-t-[#2563eb] rounded-full"></div>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div className="container mx-auto p-6 relative">
+        <div className="min-h-screen bg-gradient-to-b from-[#F5F7FA] to-[#B8C6DB] p-6">
+            <h2 className="text-3xl font-bold mb-6 text-[#2A2A2A]">Certificates</h2>
+
             {alert && (
                 <AlertMessage 
                     message={alert.message} 
@@ -133,103 +139,81 @@ const Certificates = () => {
                 />
             )}
 
-            {deleteConfirmId && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-xl">
-                        <h2 className="text-xl font-bold mb-4">Confirm Delete</h2>
-                        <p className="mb-4">Are you sure you want to delete this certificate?</p>
-                        <div className="flex space-x-4">
-                            <button 
-                                onClick={handleDeleteConfirm}
-                                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            >
-                                Confirm
-                            </button>
-                            <button 
-                                onClick={() => setDeleteConfirmId(null)}
-                                className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="mb-6 bg-white p-6 rounded-lg shadow-md">
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                        Certificate Title
-                    </label>
+            <form onSubmit={handleSubmit} className="mb-8 bg-white p-6 rounded-2xl shadow-md">
+                <div className="grid gap-4">
                     <input 
                         type="text" 
+                        placeholder="Certificate Title"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
                         required 
                     />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                        Certificate Image
-                    </label>
                     <input 
                         type="file" 
                         onChange={(e) => setImage(e.target.files[0])}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
                         accept="image/*"
                         required={!editingId}
                     />
-                </div>
-                <div className="flex space-x-4">
-                    <button 
-                        type="submit" 
-                        className={`${editingId ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-blue-500 hover:bg-blue-600'} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
-                    >
-                        {editingId ? 'Update' : 'Add'} Certificate
-                    </button>
-                    {editingId && (
-                        <button 
-                            type="button" 
-                            onClick={() => {
-                                setTitle('');
-                                setImage(null);
-                                setEditingId(null);
-                            }}
-                            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    <div className="flex gap-4">
+                        <button
+                            type="submit"
+                            className="flex items-center justify-center gap-2 flex-1 bg-gradient-to-r from-[#2563eb] to-[#3b82f6] text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all"
                         >
-                            Cancel
+                            <Plus size={18} />
+                            {editingId ? "Update Certificate" : "Add Certificate"}
                         </button>
-                    )}
+                        
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setTitle('');
+                                    setImage(null);
+                                    setEditingId(null);
+                                }}
+                                className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-300 transition-all"
+                            >
+                                Cancel
+                            </button>
+                        
+                    </div>
                 </div>
             </form>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {certificates.length > 0 ? (
                     certificates.map((cert) => (
                         <div 
                             key={cert.id} 
                             data-aos="fade-up"
-                            className="bg-white rounded-lg shadow-md p-4 transition duration-300 ease-in-out transform hover:scale-105"
+                            className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all"
                         >
-                            <img 
-                                src={`${IMAGE_BASE_URL}/${cert.certificate_image}`} 
-                                alt={cert.certificate_title} 
-                                className="w-full h-48 object-cover rounded-md mb-4"
-                            />
-                            <h3 className="text-lg font-semibold mb-2">{cert.certificate_title}</h3>
-                            <div className="flex space-x-2">
-                                <button 
+                            <h3 className="text-xl font-semibold mb-2">{cert.certificate_title}</h3>
+                            <div className="relative pt-[75%] mb-4">
+                                <img 
+                                    src={`${IMAGE_BASE_URL}/${cert.certificate_image}`} 
+                                    alt={cert.certificate_title} 
+                                    className="absolute top-0 left-0 w-full h-full object-cover rounded-lg"
+                                />
+                            </div>
+                            <div className="mt-4 flex justify-between">
+                                <button
                                     onClick={() => handleEdit(cert)}
-                                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                    className="text-blue-500 hover:underline"
                                 >
-                                    Edit
+                                    <Edit2 size={18} />
                                 </button>
-                                <button 
-                                    onClick={() => handleDeleteRequest(cert.id)}
-                                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                <button
+                                    onClick={() => {
+                                        if (!window.confirm(`Are you sure you want to delete the certificate ${cert.certificate_title}?`)) {
+                                            return;
+                                        }
+                                        handleDelete(cert.id);
+                                    }}
+                                    className="text-red-500 hover:underline"
                                 >
-                                    Delete
+                                    <Trash2 size={18} />
                                 </button>
                             </div>
                         </div>

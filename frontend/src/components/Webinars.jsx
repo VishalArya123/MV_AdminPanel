@@ -1,3 +1,4 @@
+// FRONTEND CODE (Webinars.js)
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Calendar, Clock, User } from 'lucide-react';
 import AlertMessage from './AlertMessage';
@@ -25,6 +26,7 @@ const Webinars = () => {
     status: 'upcoming',
     speaker: '',
     registration_link: '',
+    isConfirmed: 'false',
     image: null,
     image_path: ''
   });
@@ -130,7 +132,7 @@ const Webinars = () => {
       }
 
       showAlert(`Webinar ${editingWebinar ? 'updated' : 'added'} successfully`, 'success');
-      await fetchWebinars(selectedGroup); // Await the fetch
+      await fetchWebinars(selectedGroup);
       setIsDialogOpen(false);
       resetForm();
     } catch (error) {
@@ -184,6 +186,7 @@ const Webinars = () => {
       status: 'upcoming',
       speaker: '',
       registration_link: '',
+      isConfirmed: 'false',
       image: null,
       image_path: ''
     });
@@ -191,7 +194,7 @@ const Webinars = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6 max-w-7xl mx-auto min-h-screen bg-gradient-to-b from-[#F5F7FA] to-[#B8C6DB]">
       {alert && (
         <AlertMessage
           message={alert.message}
@@ -233,6 +236,7 @@ const Webinars = () => {
                 <th className="p-4 text-left">Title</th>
                 <th className="p-4 text-left">Details</th>
                 <th className="p-4 text-left">Status</th>
+                <th className="p-4 text-left">Confirmed</th>
                 <th className="p-4 text-center">Actions</th>
               </tr>
             </thead>
@@ -276,13 +280,20 @@ const Webinars = () => {
                     </span>
                   </td>
                   <td className="p-4">
+                    <span className={`px-3 py-1 rounded-full text-sm ${
+                      webinar.isConfirmed === 'true' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {webinar.isConfirmed === 'true' ? 'Confirmed' : 'Pending'}
+                    </span>
+                  </td>
+                  <td className="p-4">
                     <div className="flex justify-center gap-3">
                       <button
                         onClick={() => {
                           setEditingWebinar(webinar);
                           setFormData({
                             ...webinar,
-                            image: null // Reset image field for editing
+                            image: null
                           });
                           setIsDialogOpen(true);
                         }}
@@ -390,9 +401,25 @@ const Webinars = () => {
                       setFormData({ ...formData, status: e.target.value })
                     }
                     className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                  >
+                    >
                     <option value="upcoming">Upcoming</option>
                     <option value="past">Past</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Confirmation Status</label>
+                  <select
+                    value={formData.isConfirmed}
+                    onChange={(e) =>
+                      setFormData({ ...formData, isConfirmed: e.target.value })
+                    }
+                    className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="false">Pending</option>
+                    <option value="true">Confirmed</option>
                   </select>
                 </div>
               </div>
@@ -465,7 +492,6 @@ const Webinars = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };

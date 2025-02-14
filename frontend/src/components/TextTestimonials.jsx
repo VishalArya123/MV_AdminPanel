@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Plus, Edit2, Trash2 } from "lucide-react";
 import AlertMessage from "./AlertMessage";
 
 const TextTestimonials = () => {
@@ -112,7 +113,6 @@ const TextTestimonials = () => {
 
       const data = await response.json();
       
-      // Check both response.ok and data.success
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -121,10 +121,7 @@ const TextTestimonials = () => {
         throw new Error(data.error || "Failed to delete testimonial");
       }
 
-      // If we reach here, the deletion was successful
       showAlert("Testimonial deleted successfully!", 'success');
-      
-      // Update the local state by filtering out the deleted testimonial
       setTestimonials(prev => prev.filter(t => t.id !== id));
     } catch (error) {
       console.error("Error deleting testimonial:", error);
@@ -134,16 +131,18 @@ const TextTestimonials = () => {
 
   if (loading) {
     return (
-      <div className="p-4">
-        <h2 className="text-xl font-bold mb-4">Text Testimonials</h2>
-        <div className="text-center">Loading...</div>
+      <div className="min-h-screen bg-gradient-to-b from-[#F5F7FA] to-[#B8C6DB] p-6">
+        <h2 className="text-3xl font-bold mb-6 text-[#2A2A2A]">Text Testimonials</h2>
+        <div className="flex justify-center items-center">
+          <div className="animate-spin h-8 w-8 border-4 border-t-[#2563eb] rounded-full"></div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Text Testimonials</h2>
+    <div className="min-h-screen bg-gradient-to-b from-[#F5F7FA] to-[#B8C6DB] p-6">
+      <h2 className="text-3xl font-bold mb-6 text-[#2A2A2A]">Text Testimonials</h2>
 
       {alert && (
         <AlertMessage
@@ -153,80 +152,84 @@ const TextTestimonials = () => {
         />
       )}
 
-      <form onSubmit={handleSubmit} className="mb-6">
-        <div className="mb-2">
-          <label className="block mb-1">Name:</label>
+      <form onSubmit={handleSubmit} className="mb-8 bg-white p-6 rounded-2xl shadow-md">
+        <div className="grid gap-4">
           <input
             type="text"
-            className="w-full p-2 border rounded"
+            placeholder="Name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
             required
           />
-        </div>
-        <div className="mb-2">
-          <label className="block mb-1">Content:</label>
           <textarea
-            className="w-full p-2 border rounded"
+            placeholder="Content"
             value={formData.content}
             onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+            className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
             required
-          ></textarea>
-        </div>
-        <div className="mb-2">
-          <label className="block mb-1">Image:</label>
+          />
           <input
             type="file"
-            className="w-full p-2 border rounded"
             onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
             accept="image/*"
+            className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
           />
+          <div className="flex gap-4">
+            <button
+              type="submit"
+              className="flex items-center justify-center gap-2 flex-1 bg-gradient-to-r from-[#2563eb] to-[#3b82f6] text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all"
+            >
+              <Plus size={18} />
+              {isEditing ? "Update Testimonial" : "Add Testimonial"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setFormData({ id: "", name: "", content: "", image: null });
+                setIsEditing(false);
+              }}
+              className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-300 transition-all"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          {isEditing ? "Update" : "Add"} Testimonial
-        </button>
       </form>
 
-      <div>
-        {testimonials.length === 0 ? (
-          <p className="text-gray-500">No testimonials found.</p>
-        ) : (
-          testimonials.map((testimonial) => (
-            <div
-              key={testimonial.id}
-              className="p-4 mb-4 border rounded shadow flex items-start justify-between"
-            >
-              <div>
-                <h3 className="font-bold">{testimonial.name}</h3>
-                <p>{testimonial.content}</p>
-                {testimonial.image && (
-                  <img
-                    src={`${IMAGE_BASE_URL}/${testimonial.image}`}
-                    alt={testimonial.name}
-                    className="w-32 h-32 mt-2 object-cover"
-                  />
-                )}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {testimonials.map((testimonial) => (
+          <div
+            key={testimonial.id}
+            className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all"
+          >
+            <h3 className="text-xl font-semibold mb-2">{testimonial.name}</h3>
+            <p className="text-gray-600 mb-4">{testimonial.content}</p>
+            {testimonial.image && (
+              <div className="relative pt-[56.25%] mb-4">
+                <img
+                  src={`${IMAGE_BASE_URL}/${testimonial.image}`}
+                  alt={testimonial.name}
+                  className="absolute top-0 left-0 w-full h-full object-cover rounded-lg"
+                />
               </div>
-              <div>
-                <button
-                  className="px-2 py-1 bg-yellow-500 text-white rounded mr-2 hover:bg-yellow-600"
-                  onClick={() => handleEdit(testimonial)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                  onClick={() => handleDelete(testimonial.id, testimonial.name)}
-                >
-                  Delete
-                </button>
-              </div>
+            )}
+            <div className="mt-4 flex justify-between">
+              <button
+                onClick={() => handleEdit(testimonial)}
+                className="text-blue-500 hover:underline"
+              >
+                <Edit2 size={18} />
+              </button>
+              <button
+                onClick={() => handleDelete(testimonial.id, testimonial.name)}
+                className="text-red-500 hover:underline"
+              >
+                <Trash2 size={18} />
+              </button>
             </div>
-          ))
-        )}
+          </div>
+        ))}
       </div>
     </div>
   );
