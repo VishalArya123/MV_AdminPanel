@@ -3,7 +3,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Blogs from "./components/Blogs";
-import Carousel from "./components/Carousel";
+import ManageSubscribers from "./components/ManageSubscribers";
 import Certificates from "./components/Certificates";
 import Courses from "./components/Courses";
 import Events from "./components/Events";
@@ -22,7 +22,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Blogs />} />
             <Route path="/blogs" element={<Blogs />} />
-            <Route path="/carousel" element={<Carousel />} />
+            <Route path="/manage-subscribers" element={<ManageSubscribers />} />
             <Route path="/certificates" element={<Certificates />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/events" element={<Events />} />
