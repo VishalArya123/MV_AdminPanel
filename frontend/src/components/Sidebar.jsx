@@ -17,7 +17,7 @@ import {
 const navigationItems = [
   { id: "manage-subscribers", icon: UserRoundCheck, label: "My Subscribers", path: "/manage-subscribers" },
   { id: "blogs", icon: BookOpen, label: "Blogs", path: "/blogs" },
-  { id: "news", icon: Newspaper, label: "News", path: "/news" },
+  { id: "newsletters", icon: Newspaper, label: "News", path: "/news" },
   { id: "certificates", icon: BookOpen, label: "Certificates", path: "/certificates" },
   { id: "events", icon: CalendarDays, label: "Events", path: "/events" },
   { id: "webinars", icon: Video, label: "Webinars", path: "/webinars" },
