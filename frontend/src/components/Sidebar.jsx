@@ -21,8 +21,8 @@ const navigationItems = [
   { id: "certificates", icon: BookOpen, label: "Certificates", path: "/certificates" },
   { id: "events", icon: CalendarDays, label: "Events", path: "/events" },
   { id: "webinars", icon: Video, label: "Webinars", path: "/webinars" },
-  { id: "courses", icon: PlayCircle, label: "Courses", path: "/courses" },
-  { id: "rewards", icon: Trophy, label: "Rewards", path: "/rewards" },
+  // { id: "courses", icon: PlayCircle, label: "Courses", path: "/courses" },
+  // { id: "rewards", icon: Trophy, label: "Rewards", path: "/rewards" },
   { id: "text-testimonials", icon: MessageSquare, label: "Text Testimonials", path: "/text-testimonials" },
   { id: "video-testimonials", icon: MessageCircle, label: "Video Testimonials", path: "/video-testimonials" }
 ];

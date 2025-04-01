@@ -1,6 +1,7 @@
 // FRONTEND CODE (Webinars.js)
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Calendar, Clock, User } from 'lucide-react';
+import { Plus, Edit2, Trash2, Calendar, Clock, User , InfoIcon } from 'lucide-react';
+import InstructionBox from './InstructionBox';
 import AlertMessage from './AlertMessage';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -9,6 +10,16 @@ const API_BASE_URL = 'https://backend.marichiventures.com/admin/pages';
 const IMAGE_BASE_URL = `${API_BASE_URL}/uploads/webinars`;
 
 const Webinars = () => {
+
+  const instructionData = {
+    title: "How to use webinars admin panel",
+    instructions: [
+      "Fill out all required fields in the form",
+      "Review your information for accuracy",
+      "add the youtube link when the webinars end at the particular date"
+    ],
+    icon: <InfoIcon />
+  };
   const [webinarGroups, setWebinarGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState('');
   const [webinars, setWebinars] = useState([]);
@@ -203,7 +214,10 @@ const Webinars = () => {
         />
       )}
 
-      <div className="mb-6">
+      {/* this is the instruction box */}
+      <InstructionBox data={instructionData} />
+
+      <div className="mt-6 mb-6">
         <select
           value={selectedGroup}
           onChange={(e) => setSelectedGroup(e.target.value)}
