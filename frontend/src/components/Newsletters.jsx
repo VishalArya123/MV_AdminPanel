@@ -1,10 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { Trash2, Edit, Plus, X, CheckCircle, Download, AlertCircle } from 'lucide-react';
+import { Trash2, Edit, Plus, X, CheckCircle, Download, AlertCircle,InfoIcon } from 'lucide-react';
+import InstructionBox from './InstructionBox';
 
 const BASE_URL = "https://backend.marichiventures.com/admin/pages";
 const IMAGE_BASE_URL = "https://backend.marichiventures.com/admin/pages/uploads/newsletters";
 
 const Newsletters = () => {
+
+  const instructionData = {
+    title: "How to use Newsletter Management Admin Panel",
+    instructions: [
+      "Click 'Add Newsletter' to create a new newsletter entry",
+      "Fill in the required fields: Title, Preview Text, Date, Category, and Cover Image",
+      "Provide a PDF link to the full newsletter for download access",
+      "For date format, use descriptive terms like 'Summer 2024' rather than specific dates",
+      "Edit existing newsletters by clicking the pencil icon in the Actions column",
+      "Download the full PDF by clicking the download icon if available",
+      "Delete newsletters by clicking the trash icon (confirmation will be required)",
+      "When editing, you can leave the Cover Image field empty to keep the current image"
+    ],
+    icon: <InfoIcon />
+  };
+
   const [newsletters, setNewsletters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -202,6 +219,10 @@ const Newsletters = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <div className="mb-6"> 
+        {/* this is the instruction box */}
+        <InstructionBox data={instructionData}/>
+      </div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Newsletter Management</h1>
         <button

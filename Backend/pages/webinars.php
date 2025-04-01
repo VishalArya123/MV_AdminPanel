@@ -132,11 +132,11 @@ try {
                         $query = "UPDATE webinars SET 
                             group_id = ?, title = ?, description = ?, date = ?, 
                             time = ?, duration = ?, status = ?, speaker = ?, 
-                            registration_link = ?, image_path = ?
+                            registration_link = ?, isConfirmed = ?, image_path = ?
                             WHERE id = ?";
                         
                         $stmt = $conn->prepare($query);
-                        $stmt->bind_param("isssssssssi",
+                        $stmt->bind_param("issssssssssi",
                             $_POST['group_id'],
                             $_POST['title'],
                             $_POST['description'],
@@ -146,6 +146,7 @@ try {
                             $_POST['status'],
                             $_POST['speaker'],
                             $_POST['registration_link'],
+                            $_POST['isConfirmed'],
                             $final_image_path,
                             $_GET['id']
                         );
@@ -153,11 +154,11 @@ try {
                         // Insert new webinar
                         $query = "INSERT INTO webinars (
                             group_id, title, description, date, time, 
-                            duration, status, speaker, registration_link, image_path
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                            duration, status, speaker, registration_link, isConfirmed, image_path
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         
                         $stmt = $conn->prepare($query);
-                        $stmt->bind_param("isssssssss", 
+                        $stmt->bind_param("issssssssss", 
                             $_POST['group_id'],
                             $_POST['title'],
                             $_POST['description'],
@@ -167,6 +168,7 @@ try {
                             $_POST['status'],
                             $_POST['speaker'],
                             $_POST['registration_link'],
+                            $_POST['isConfirmed'],
                             $image_path
                         );
                     }

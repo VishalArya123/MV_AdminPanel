@@ -8,12 +8,31 @@ import {
   Search,
   Filter,
   ArrowUpDown,
+  InfoIcon
 } from "lucide-react";
+import InstructionBox from './InstructionBox';
+
 
 const BASE_URL = "https://backend.marichiventures.com/admin/pages";
 const IMAGE_BASE_URL = "https://backend.marichiventures.com/admin/pages/uploads/blogs";
 
 const Blogs = () => {
+
+  const instructionData = {
+    title: "How to use Blog Management Admin Panel",
+    instructions: [
+      "Use the search bar to quickly find specific blogs by title",
+      "Filter blogs by category using the dropdown menu",
+      "Add a new blog by clicking the 'Add Blog' button and filling all required fields",
+      "Upload blog images in the recommended size of 1280x720px for best results",
+      "Edit existing blogs by clicking the pencil icon in the Actions column",
+      "Delete blogs by clicking the trash icon (confirmation will be required)",
+      "Mark important content as 'Featured' to highlight it on the website",
+      "Provide accurate read time estimates to help readers plan their time"
+    ],
+    icon: <InfoIcon />
+  };
+
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -220,8 +239,15 @@ const Blogs = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <div className="mb-6"> 
+        {/* this is the instruction box */}
+        <InstructionBox data={instructionData}/>
+      </div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Blog Management</h1>
+
+        
+
         <button
           onClick={() => setShowModal(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center"

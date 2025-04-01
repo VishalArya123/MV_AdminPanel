@@ -1,10 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Plus, Edit2, Trash2 } from "lucide-react";
+import { Plus, Edit2, Trash2, InfoIcon } from "lucide-react";
 import AlertMessage from "./AlertMessage";
+import InstructionBox from "./InstructionBox";
 
 const TextTestimonials = () => {
   const BASE_URL = "https://backend.marichiventures.com/admin/pages";
   const IMAGE_BASE_URL = "https://backend.marichiventures.com/admin/pages/uploads/text_testimonials";
+  
+  const instructionData = {
+    title: "How to use Text Testimonials admin panel",
+    instructions: [
+      "Add new text testimonials by filling out the name and content fields",
+      "Upload an optional profile image for the testimonial",
+      "Edit existing testimonials by clicking the edit icon",
+      "Delete testimonials by clicking the delete icon (this action cannot be undone)",
+      "All testimonials are displayed on the public-facing website",
+      "Ensure images are high quality and properly sized before uploading"
+    ],
+    icon: <InfoIcon />
+  };
   
   const [testimonials, setTestimonials] = useState([]);
   const [error, setError] = useState(null);
@@ -151,6 +165,11 @@ const TextTestimonials = () => {
           onClose={() => setAlert(null)}
         />
       )}
+      
+      <div className="mb-6">
+        {/* Added instruction box */}
+        <InstructionBox data={instructionData} />
+      </div>
 
       <form onSubmit={handleSubmit} className="mb-8 bg-white p-6 rounded-2xl shadow-md">
         <div className="grid gap-4">

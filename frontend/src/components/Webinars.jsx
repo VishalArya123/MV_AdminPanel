@@ -12,11 +12,15 @@ const IMAGE_BASE_URL = `${API_BASE_URL}/uploads/webinars`;
 const Webinars = () => {
 
   const instructionData = {
-    title: "How to use webinars admin panel",
+    title: "How to use Webinars admin panel",
     instructions: [
-      "Fill out all required fields in the form",
-      "Review your information for accuracy",
-      "add the youtube link when the webinars end at the particular date"
+      "Select a webinar group from the dropdown menu first",
+      "Click 'Add Webinar' to create a new webinar entry",
+      "Fill out all required fields in the form including title, description, date, time, and registration link",
+      "Upload an appropriate image for the webinar",
+      "Set the status as 'Upcoming' for future webinars or 'Past' for completed ones",
+      "Mark webinars as 'Confirmed' once speakers and details are finalized",
+      "Add YouTube links to past webinars for attendee reference"
     ],
     icon: <InfoIcon />
   };

@@ -1,9 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Plus, Edit2, Trash2 } from "lucide-react";
+import { Plus, Edit2, Trash2, InfoIcon } from "lucide-react";
 import AlertMessage from "./AlertMessage";
+import InstructionBox from "./InstructionBox";
 
 const VideoTestimonials = () => {
   const BASE_URL = "https://backend.marichiventures.com/admin/pages";
+  
+  const instructionData = {
+    title: "How to use Video Testimonials admin panel",
+    instructions: [
+      "Add new video testimonials by filling out the name, description and video URL fields",
+      "Use YouTube video links for best compatibility",
+      "Edit existing testimonials by clicking the edit icon",
+      "Delete testimonials by clicking the delete icon (this action cannot be undone)",
+      "All changes are saved automatically to the database",
+      "YouTube Shorts links will be automatically converted to embedded format"
+    ],
+    icon: <InfoIcon />
+  };
 
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -160,6 +174,11 @@ const VideoTestimonials = () => {
           onClose={() => setAlert(null)}
         />
       )}
+      
+      <div className="mb-6">
+        {/* Added instruction box */}
+        <InstructionBox data={instructionData} />
+      </div>
 
       <form onSubmit={handleSubmit} className="mb-8 bg-white p-6 rounded-2xl shadow-md">
         <div className="grid gap-4">
