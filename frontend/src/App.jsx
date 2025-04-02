@@ -1,4 +1,3 @@
-// App.jsx
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
@@ -12,6 +11,7 @@ import TextTestimonials from "./components/TextTestimonials";
 import VideoTestimonials from "./components/VideoTestimonials";
 import Webinars from "./components/Webinars";
 import Rewards from "./components/Rewards";
+import UserManagement from "./components/UserManagement";
 
 const App = () => {
   return (
@@ -23,6 +23,7 @@ const App = () => {
             <Route path="/" element={<Blogs />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/manage-subscribers" element={<ManageSubscribers />} />
+            <Route path="/user-management" element={<UserManagement />} />
             <Route path="/certificates" element={<Certificates />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/events" element={<Events />} />

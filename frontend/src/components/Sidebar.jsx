@@ -1,4 +1,3 @@
-// Sidebar.jsx
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { 
@@ -11,10 +10,12 @@ import {
   MessageSquare, 
   MessageCircle, 
   Video, 
-  Trophy
+  Trophy,
+  Users
 } from "lucide-react";
 
 const navigationItems = [
+  { id: "user-management", icon: Users, label: "User Management", path: "/user-management" },
   { id: "manage-subscribers", icon: UserRoundCheck, label: "My Subscribers", path: "/manage-subscribers" },
   { id: "blogs", icon: BookOpen, label: "Blogs", path: "/blogs" },
   { id: "newsletters", icon: Newspaper, label: "NewsLetter", path: "/news" },
