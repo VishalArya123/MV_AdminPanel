@@ -20,7 +20,7 @@ const App = () => {
         <Sidebar />
         <div className="ml-52 w-full p-6">
           <Routes>
-            <Route path="/user-management" element={<UserManagement />} />
+            <Route path="/" element={<UserManagement />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/manage-subscribers" element={<ManageSubscribers />} />
             <Route path="/user-management" element={<UserManagement />} />
