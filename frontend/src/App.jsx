@@ -16,7 +16,7 @@ import Webinars from "./components/Webinars";
 import UserManagement from "./components/UserManagement";
 import Login from "./pages/Login";
 import Unauthorized from "./pages/Unauthorized";
-
+import Profile from "./components/Profile";
 const App = () => {
   const { isLoading } = useAuth0();
 
@@ -43,7 +43,7 @@ const App = () => {
                   <Sidebar />
                   <div className="ml-52 w-full p-6">
                     <Routes>
-                      <Route path="/" element={<Navigate to="/user-management" replace />} />
+                      <Route path="/" element={<Navigate to="/profile" replace />} />
                       <Route path="/blogs" element={<Blogs />} />
                       <Route path="/manage-subscribers" element={<ManageSubscribers />} />
                       <Route path="/user-management" element={<UserManagement />} />
@@ -53,6 +53,7 @@ const App = () => {
                       <Route path="/text-testimonials" element={<TextTestimonials />} />
                       <Route path="/video-testimonials" element={<VideoTestimonials />} />
                       <Route path="/webinars" element={<Webinars />} />
+                      <Route path="/profile" element={<Profile />} />
                     </Routes>
                   </div>
                 </div>

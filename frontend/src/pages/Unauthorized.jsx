@@ -15,7 +15,7 @@ const Unauthorized = () => {
         <p className="text-gray-600 mb-6">
           You do not have access to the Admin Panel. For privilege access, contact the Admin at{' '}
           <a href="mailto:admin@example.com" className="text-emerald-600 hover:underline">
-            admin@example.com
+            info@marichiventures.com
           </a>
         </p>
         <div className="flex flex-col space-y-3">

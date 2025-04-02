@@ -58,12 +58,33 @@ export const AuthProvider = ({ children }) => {
     return false;
   };
 
+  // const canAccessRoute = (path) => {
+  //   // Define route access restrictions
+  //   if (path === '/user-management' && userPrivilege !== 'Admin') return false;
+  //   if (path === '/manage-subscribers' && (userPrivilege === 'Employee' || userPrivilege === 'Registered User' || userPrivilege === 'Unauthorized')) return false;
+  //   if ((userPrivilege === 'Registered User' || userPrivilege === 'Unauthorized')) return false;
+  //   return true;
+  // };
   const canAccessRoute = (path) => {
-    // Define route access restrictions
-    if (path === '/user-management' && userPrivilege !== 'Admin') return false;
-    if (path === '/manage-subscribers' && (userPrivilege === 'Employee' || userPrivilege === 'Registered User' || userPrivilege === 'Unauthorized')) return false;
-    if ((userPrivilege === 'Registered User' || userPrivilege === 'Unauthorized')) return false;
-    return true;
+    // Unauthorized or registered users can't access anything
+    if (userPrivilege === 'Unauthorized' || userPrivilege === 'Registered User') {
+      return false;
+    }
+    
+    // Path-specific restrictions based on user privilege
+    switch (userPrivilege) {
+      case 'Admin':
+        // Admin can access everything
+        return true;
+      case 'Manager':
+        // Managers can access everything except user management
+        return path !== '/user-management';
+      case 'Employee':
+        // Employees can access everything except user management and manage subscribers
+        return path !== '/user-management' && path !== '/manage-subscribers';
+      default:
+        return false;
+    }
   };
 
   return (
