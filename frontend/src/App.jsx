@@ -17,6 +17,7 @@ import UserManagement from "./components/UserManagement";
 import Login from "./pages/Login";
 import Unauthorized from "./pages/Unauthorized";
 import Profile from "./components/Profile";
+import Courses from "./components/Courses";
 const App = () => {
   const { isLoading } = useAuth0();
 
@@ -53,6 +54,7 @@ const App = () => {
                       <Route path="/text-testimonials" element={<TextTestimonials />} />
                       <Route path="/video-testimonials" element={<VideoTestimonials />} />
                       <Route path="/webinars" element={<Webinars />} />
+                      <Route path="/courses" element={<Courses />} />
                       <Route path="/profile" element={<Profile />} />
                     </Routes>
                   </div>

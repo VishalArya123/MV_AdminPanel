@@ -15,6 +15,7 @@ import {
   Users,
   LogOut,
   User,
+  Library,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -84,6 +85,13 @@ const Sidebar = () => {
       label: "Video Testimonials",
       path: "/video-testimonials",
       requiredPrivilege: "Employee",
+    },
+    {
+      id: "courses",
+      icon: Library,
+      label: "Courses",
+      path: "/courses",
+      requiredPrivilege: "Admin",
     },
   ];
 
