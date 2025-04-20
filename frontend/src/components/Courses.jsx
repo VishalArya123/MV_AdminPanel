@@ -16,6 +16,7 @@ import InstructionBox from "./InstructionBox";
 
 const Courses = () => {
   const BASE_URL = "https://backend.marichiventures.com/admin/pages";
+  const UPLOADS_BASE_URL = "https://backend.marichiventures.com/admin/pages/";
 
   const instructionData = {
     title: "How to use Courses admin panel",
@@ -59,6 +60,7 @@ const Courses = () => {
     thumbnail: null,
     remove_thumbnail: 0,
     remove_video: 0,
+    thumbnailPreview: null,
   });
   const [isEditing, setIsEditing] = useState(false);
   const [alert, setAlert] = useState(null);
@@ -148,66 +150,71 @@ const Courses = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Validate form
-    if (
-      !formData.title ||
-      !formData.description ||
-      !formData.short_description ||
-      !formData.category ||
-      !formData.instructor_id
-    ) {
-      showAlert("Please fill out all required fields.");
-      return;
-    }
-
-    const formDataToSend = new FormData();
-
-    // Add all text fields to FormData
-    for (const key in formData) {
-      if (
-        key !== "thumbnail" &&
-        key !== "video_file" &&
-        formData[key] !== null
-      ) {
-        formDataToSend.append(key, formData[key]);
+    const requiredFields = [
+      'title', 'description', 'short_description', 'category', 'instructor_id'
+    ];
+    for (const field of requiredFields) {
+      if (!formData[field]) {
+        showAlert(`Please fill out the ${field.replace('_', ' ')} field.`);
+        return;
       }
     }
-
-    // Add files to FormData if they exist
-    if (formData.thumbnail instanceof File) {
-      formDataToSend.append("thumbnail", formData.thumbnail);
-    }
-
-    if (formData.video_file instanceof File) {
-      formDataToSend.append("video_file", formData.video_file);
-    }
-
+  
+    const formDataToSend = new FormData();
+  
+    // Add all fields to FormData
+    Object.keys(formData).forEach(key => {
+      if (key !== "thumbnailPreview" && formData[key] !== null && formData[key] !== undefined) {
+        // For files, append directly, for others, stringify
+        if (key === "thumbnail" || key === "video_file") {
+          if (formData[key] instanceof File) {
+            formDataToSend.append(key, formData[key]);
+          } else if (typeof formData[key] === 'string') {
+            // If it's a string path (existing file), don't append as file
+            formDataToSend.append(key, formData[key]);
+          }
+        } else {
+          formDataToSend.append(key, formData[key]);
+        }
+      }
+    });
+  
     try {
-      const response = await fetch(`${BASE_URL}/courses.php`, {
-        method: "POST",
+      const url = `${BASE_URL}/courses.php`;
+      const method = isEditing ? "POST" : "POST";
+  
+      const response = await fetch(url, {
+        method,
         body: formDataToSend,
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-          errorData.error || `HTTP error! status: ${response.status}`
-        );
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
-
+  
       const data = await response.json();
+  
       if (data.success) {
         showAlert(
-          isEditing
-            ? "Course updated successfully!"
-            : "Course added successfully!",
+          isEditing ? "Course updated successfully!" : "Course added successfully!",
           "success"
         );
+        
+        // Update thumbnail and video URLs if they were uploaded
+        if (data.thumbnail_url) {
+          setFormData(prev => ({ ...prev, thumbnail: data.thumbnail_url }));
+        }
+        if (data.video_file_url) {
+          setFormData(prev => ({ ...prev, video_file: data.video_file_url }));
+        }
+        
         resetForm();
-        await fetchCourses(pagination.page);
+        await fetchCourses(isEditing ? pagination.page : 1);
       } else {
-        throw new Error(data.error || "Failed to save course.");
+        throw new Error(data.message || "Failed to save course.");
       }
     } catch (error) {
       console.error("Error submitting course:", error);
@@ -235,17 +242,32 @@ const Courses = () => {
       thumbnail: null,
       remove_thumbnail: 0,
       remove_video: 0,
+      thumbnailPreview: null,
     });
     setIsEditing(false);
   };
 
   const handleEdit = (course) => {
     setFormData({
-      ...course,
-      thumbnail: null,
-      video_file: null,
+      id: course.id,
+      title: course.title,
+      slug: course.slug,
+      description: course.description,
+      short_description: course.short_description,
+      category: course.category,
+      instructor_id: course.instructor_id.toString(),
+      language: course.language || "English",
+      price: course.price,
+      discount_price: course.discount_price || "",
+      level: course.level || "Beginner",
+      duration: course.duration || "",
+      video_url: course.video_url || "",
+      video_file: course.video_file || null,
+      is_published: course.is_published,
+      thumbnail: course.thumbnail || null,
       remove_thumbnail: 0,
       remove_video: 0,
+      thumbnailPreview: course.thumbnail ? `${UPLOADS_BASE_URL}/${course.thumbnail}` : null,
     });
     setIsEditing(true);
     window.scrollTo(0, 0);
@@ -271,11 +293,11 @@ const Courses = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(data.message || `HTTP error! status: ${response.status}`);
       }
 
       if (!data.success) {
-        throw new Error(data.error || "Failed to delete course");
+        throw new Error(data.message || "Failed to delete course");
       }
 
       showAlert("Course deleted successfully!", "success");
@@ -315,10 +337,9 @@ const Courses = () => {
       if (field === "thumbnail" && file.type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          const previewUrl = e.target.result;
-          setFormData((prevData) => ({
-            ...prevData,
-            thumbnailPreview: previewUrl,
+          setFormData(prev => ({
+            ...prev,
+            thumbnailPreview: e.target.result,
           }));
         };
         reader.readAsDataURL(file);
@@ -737,6 +758,7 @@ const Courses = () => {
         </div>
       </form>
 
+      {/* Course List Section */}
       <div className="mb-6">
         <h3 className="text-xl font-semibold mb-4">Course List</h3>
 
@@ -808,7 +830,7 @@ const Courses = () => {
                 <div className="relative h-48 bg-gray-100">
                   {course.thumbnail ? (
                     <img
-                      src={`${BASE_URL}/${course.thumbnail}`}
+                      src={`${UPLOADS_BASE_URL}/${course.thumbnail}`}
                       alt={course.title}
                       className="w-full h-full object-cover"
                       onError={(e) => {
@@ -881,15 +903,6 @@ const Courses = () => {
                       >
                         <Edit2 size={16} />
                       </button>
-
-                      {/* 
-                      <button
-                        onClick={() => handleEdit(course)}
-                        className="p-2 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200"
-                        title="Edit course"
-                      >
-                        <Edit2 size={16} />
-                      </button> */}
                       <button
                         onClick={() => handleDelete(course.id, course.title)}
                         className="p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200"
@@ -933,7 +946,6 @@ const Courses = () => {
               </button>
 
               {[...Array(pagination.pages)].map((_, i) => {
-                // Show current page, and 1 page before and after
                 if (
                   i + 1 === 1 ||
                   i + 1 === pagination.pages ||
@@ -953,7 +965,6 @@ const Courses = () => {
                     </button>
                   );
                 }
-                // Add ellipsis
                 if (
                   (i + 1 === pagination.page - 2 && pagination.page > 3) ||
                   (i + 1 === pagination.page + 2 &&
