@@ -62,6 +62,7 @@ const Courses = () => {
     remove_video: 0,
     thumbnailPreview: null,
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [alert, setAlert] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -150,7 +151,10 @@ const Courses = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    
+    // Set submitting state to true
+    setIsSubmitting(true);
+    
     // Validate form
     const requiredFields = [
       'title', 'description', 'short_description', 'category', 'instructor_id'
@@ -158,12 +162,13 @@ const Courses = () => {
     for (const field of requiredFields) {
       if (!formData[field]) {
         showAlert(`Please fill out the ${field.replace('_', ' ')} field.`);
+        setIsSubmitting(false); // Reset submitting state
         return;
       }
     }
-  
+    
     const formDataToSend = new FormData();
-  
+    
     // Add all fields to FormData
     Object.keys(formData).forEach(key => {
       if (key !== "thumbnailPreview" && formData[key] !== null && formData[key] !== undefined) {
@@ -180,23 +185,23 @@ const Courses = () => {
         }
       }
     });
-  
+    
     try {
       const url = `${BASE_URL}/courses.php`;
       const method = isEditing ? "POST" : "POST";
-  
+      
       const response = await fetch(url, {
         method,
         body: formDataToSend,
       });
-  
+      
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
-  
+      
       const data = await response.json();
-  
+      
       if (data.success) {
         showAlert(
           isEditing ? "Course updated successfully!" : "Course added successfully!",
@@ -219,6 +224,9 @@ const Courses = () => {
     } catch (error) {
       console.error("Error submitting course:", error);
       showAlert(error.message || "Failed to save course. Please try again.");
+    } finally {
+      // Reset submitting state regardless of outcome
+      setIsSubmitting(false);
     }
   };
 
@@ -741,15 +749,34 @@ const Courses = () => {
         <div className="mt-6 flex space-x-3">
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            disabled={isSubmitting}
+            className={`px-4 py-2 ${
+              isSubmitting ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
+            } text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center`}
           >
-            {isEditing ? "Update Course" : "Add Course"}
+            {isSubmitting && (
+              <span className="mr-2">
+                <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
+              </span>
+            )}
+            {isSubmitting
+              ? isEditing
+                ? "Updating..."
+                : "Creating..."
+              : isEditing
+                ? "Update Course"
+                : "Add Course"}
           </button>
-
+          {(formData.thumbnail instanceof File || formData.video_file instanceof File) && isSubmitting && (
+            <div className="mt-3 text-sm text-blue-600">
+              Uploading files... This may take a moment for large files.
+            </div>
+          )}
           {isEditing && (
             <button
               type="button"
               onClick={resetForm}
+              disabled={isSubmitting}
               className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
             >
               Cancel
