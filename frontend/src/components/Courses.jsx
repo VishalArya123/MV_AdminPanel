@@ -15,7 +15,7 @@ import AlertMessage from "./AlertMessage";
 import InstructionBox from "./InstructionBox";
 
 const Courses = () => {
-  const BASE_URL = "https://backend.marichiventures.com/admin/pages";
+  const BASE_URL = "https://backend.marichiventures.com/admin/pages/courses.php";
   const UPLOADS_BASE_URL = "https://backend.marichiventures.com/admin/pages/";
 
   const instructionData = {
@@ -91,21 +91,17 @@ const Courses = () => {
   const fetchCourses = async (page = 1) => {
     setLoading(true);
     try {
-      let url = `${BASE_URL}/courses.php?page=${page}&limit=${pagination.limit}`;
+      const params = new URLSearchParams({
+        page,
+        limit: pagination.limit,
+        action: 'list'
+      });
 
-      if (searchTerm) {
-        url += `&search=${encodeURIComponent(searchTerm)}`;
-      }
+      if (searchTerm) params.append('search', searchTerm);
+      if (categoryFilter) params.append('category', categoryFilter);
+      if (levelFilter) params.append('level', levelFilter);
 
-      if (categoryFilter) {
-        url += `&category=${encodeURIComponent(categoryFilter)}`;
-      }
-
-      if (levelFilter) {
-        url += `&level=${encodeURIComponent(levelFilter)}`;
-      }
-
-      const response = await fetch(url);
+      const response = await fetch(`${BASE_URL}?${params.toString()}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -124,7 +120,7 @@ const Courses = () => {
 
   const fetchInstructors = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/instructors.php`);
+      const response = await fetch(`${BASE_URL}?action=list_instructors`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -167,37 +163,25 @@ const Courses = () => {
     
     const formDataToSend = new FormData();
     
-    // Add all fields to FormData including the ID when editing
+    // Add all fields to FormData
     Object.keys(formData).forEach(key => {
       if (key !== "thumbnailPreview" && formData[key] !== null && formData[key] !== undefined) {
         if (key === "thumbnail" || key === "video_file") {
           if (formData[key] instanceof File) {
             formDataToSend.append(key, formData[key]);
-          } else if (typeof formData[key] === 'string') {
-            formDataToSend.append(key, formData[key]);
           }
         } else {
-          // Ensure ID is included when editing
-          if (isEditing && key === "id") {
-            formDataToSend.append(key, formData[key]);
-          } else if (!isEditing && key !== "id") {
-            formDataToSend.append(key, formData[key]);
-          }
+          formDataToSend.append(key, formData[key]);
         }
       }
     });
     
     try {
-      const url = `${BASE_URL}/courses.php`;
-      const method = isEditing ? "PUT" : "POST";
-      
-      // For PUT requests, we need to send the _method parameter
-      if (isEditing) {
-        formDataToSend.append('_method', 'PUT');
-      }
+      const action = isEditing ? 'update' : 'create';
+      const url = `${BASE_URL}?action=${action}`;
       
       const response = await fetch(url, {
-        method: isEditing ? "POST" : "POST", // Use POST for both cases
+        method: "POST",
         body: formDataToSend,
       });
       
@@ -261,7 +245,7 @@ const Courses = () => {
 
   const handleEdit = (course) => {
     setFormData({
-      id: course.id.toString(), // Ensure ID is a string
+      id: course.id.toString(),
       title: course.title,
       slug: course.slug,
       description: course.description,
@@ -286,18 +270,15 @@ const Courses = () => {
   };
 
   const handleDelete = async (id, title) => {
-    if (
-      !window.confirm(`Are you sure you want to delete the course "${title}"?`)
-    ) {
+    if (!window.confirm(`Are you sure you want to delete the course "${title}"?`)) {
       return;
     }
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("_method", "DELETE");
       formDataToSend.append("id", id);
 
-      const response = await fetch(`${BASE_URL}/courses.php`, {
+      const response = await fetch(`${BASE_URL}?action=delete`, {
         method: "POST",
         body: formDataToSend,
       });
