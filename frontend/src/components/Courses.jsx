@@ -151,8 +151,6 @@ const Courses = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Set submitting state to true
     setIsSubmitting(true);
     
     // Validate form
@@ -162,7 +160,7 @@ const Courses = () => {
     for (const field of requiredFields) {
       if (!formData[field]) {
         showAlert(`Please fill out the ${field.replace('_', ' ')} field.`);
-        setIsSubmitting(false); // Reset submitting state
+        setIsSubmitting(false);
         return;
       }
     }
@@ -172,12 +170,10 @@ const Courses = () => {
     // Add all fields to FormData
     Object.keys(formData).forEach(key => {
       if (key !== "thumbnailPreview" && formData[key] !== null && formData[key] !== undefined) {
-        // For files, append directly, for others, stringify
         if (key === "thumbnail" || key === "video_file") {
           if (formData[key] instanceof File) {
             formDataToSend.append(key, formData[key]);
           } else if (typeof formData[key] === 'string') {
-            // If it's a string path (existing file), don't append as file
             formDataToSend.append(key, formData[key]);
           }
         } else {
@@ -188,7 +184,7 @@ const Courses = () => {
     
     try {
       const url = `${BASE_URL}/courses.php`;
-      const method = isEditing ? "POST" : "POST";
+      const method = isEditing ? "PUT" : "POST";
       
       const response = await fetch(url, {
         method,
@@ -208,7 +204,6 @@ const Courses = () => {
           "success"
         );
         
-        // Update thumbnail and video URLs if they were uploaded
         if (data.thumbnail_url) {
           setFormData(prev => ({ ...prev, thumbnail: data.thumbnail_url }));
         }
@@ -225,7 +220,6 @@ const Courses = () => {
       console.error("Error submitting course:", error);
       showAlert(error.message || "Failed to save course. Please try again.");
     } finally {
-      // Reset submitting state regardless of outcome
       setIsSubmitting(false);
     }
   };
