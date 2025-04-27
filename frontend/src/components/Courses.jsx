@@ -167,7 +167,7 @@ const Courses = () => {
     
     const formDataToSend = new FormData();
     
-    // Add all fields to FormData
+    // Add all fields to FormData including the ID when editing
     Object.keys(formData).forEach(key => {
       if (key !== "thumbnailPreview" && formData[key] !== null && formData[key] !== undefined) {
         if (key === "thumbnail" || key === "video_file") {
@@ -177,7 +177,12 @@ const Courses = () => {
             formDataToSend.append(key, formData[key]);
           }
         } else {
-          formDataToSend.append(key, formData[key]);
+          // Ensure ID is included when editing
+          if (isEditing && key === "id") {
+            formDataToSend.append(key, formData[key]);
+          } else if (!isEditing && key !== "id") {
+            formDataToSend.append(key, formData[key]);
+          }
         }
       }
     });
@@ -186,8 +191,13 @@ const Courses = () => {
       const url = `${BASE_URL}/courses.php`;
       const method = isEditing ? "PUT" : "POST";
       
+      // For PUT requests, we need to send the _method parameter
+      if (isEditing) {
+        formDataToSend.append('_method', 'PUT');
+      }
+      
       const response = await fetch(url, {
-        method,
+        method: isEditing ? "POST" : "POST", // Use POST for both cases
         body: formDataToSend,
       });
       
