@@ -261,7 +261,7 @@ const Courses = () => {
 
   const handleEdit = (course) => {
     setFormData({
-      id: course.id,
+      id: course.id.toString(), // Ensure ID is a string
       title: course.title,
       slug: course.slug,
       description: course.description,
