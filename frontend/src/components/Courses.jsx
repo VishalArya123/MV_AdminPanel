@@ -194,7 +194,7 @@ const Courses = () => {
         },
         body: formDataToSend,
         // Include credentials if your server requires cookies
-        credentials: 'include'
+        // credentials: 'include'
       });
       
       // Log the actual response for debugging
