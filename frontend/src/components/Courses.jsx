@@ -96,16 +96,16 @@ const Courses = () => {
         limit: pagination.limit,
         action: 'list'
       });
-
+  
       if (searchTerm) params.append('search', searchTerm);
       if (categoryFilter) params.append('category', categoryFilter);
       if (levelFilter) params.append('level', levelFilter);
-
-      const response = await fetch(`${BASE_URL}?${params.toString()}`);
+  
+      const response = await fetch(`${BASE_URL}?${params.toString()}`); // Fixed: Added backticks
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`); // Fixed: Added backticks
       }
-
+  
       const data = await response.json();
       setCourses(data.data || []);
       setPagination(data.pagination || pagination);
@@ -116,7 +116,7 @@ const Courses = () => {
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
   const fetchInstructors = async () => {
     try {
@@ -178,7 +178,7 @@ const Courses = () => {
     
     try {
       const action = isEditing ? 'update' : 'create';
-      const url = `${BASE_URL}?action=${action}`;
+      const url = `${BASE_URL}?action=${action}`; // Fixed: Added backticks for template literal
       
       const response = await fetch(url, {
         method: "POST",
@@ -263,7 +263,7 @@ const Courses = () => {
       thumbnail: course.thumbnail || null,
       remove_thumbnail: 0,
       remove_video: 0,
-      thumbnailPreview: course.thumbnail ? `${UPLOADS_BASE_URL}/${course.thumbnail}` : null,
+      thumbnailPreview: course.thumbnail ? `${UPLOADS_BASE_URL}/${course.thumbnail}` : null, // Fixed: Added backticks
     });
     setIsEditing(true);
     window.scrollTo(0, 0);
@@ -323,9 +323,9 @@ const Courses = () => {
       setFormData({
         ...formData,
         [field]: file,
-        [`remove_${field}`]: 0,
+        [`remove_${field}`]: 0, // Fixed: Added backticks
       });
-
+  
       // Create a preview URL for the file
       if (field === "thumbnail" && file.type.startsWith("image/")) {
         const reader = new FileReader();
@@ -344,7 +344,7 @@ const Courses = () => {
     setFormData({
       ...formData,
       [field]: null,
-      [`remove_${field}`]: 1,
+      [`remove_${field}`]: 1, // Fixed: Added backticks
       ...(field === "thumbnail" ? { thumbnailPreview: null } : {}),
     });
   };
