@@ -176,21 +176,43 @@ const Courses = () => {
       }
     });
     
+    // Explicitly add a _method field to help PHP recognize it
+    if (isEditing) {
+      formDataToSend.append('_method', 'PUT');
+    }
+    
     try {
       const action = isEditing ? 'update' : 'create';
-      const url = `${BASE_URL}?action=${action}`; // Fixed: Added backticks for template literal
+      const url = `${BASE_URL}?action=${action}`;
       
       const response = await fetch(url, {
         method: "POST",
+        // Don't set Content-Type header when using FormData, let the browser set it with boundary
+        headers: {
+          // Add this to make sure PHP recognizes it as a POST request
+          'X-Requested-With': 'XMLHttpRequest'
+        },
         body: formDataToSend,
+        // Include credentials if your server requires cookies
+        credentials: 'include'
       });
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      // Log the actual response for debugging
+      const responseText = await response.text();
+      console.log("Raw response:", responseText);
+      
+      // Try to parse the response as JSON
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (e) {
+        console.error("Failed to parse response as JSON:", e);
+        throw new Error("Server returned invalid JSON");
       }
       
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || `HTTP error! status: ${response.status}`);
+      }
       
       if (data.success) {
         showAlert(
