@@ -165,53 +165,52 @@ const Courses = () => {
     
     // Add all fields to FormData
     Object.keys(formData).forEach(key => {
-      if (key !== "thumbnailPreview" && formData[key] !== null && formData[key] !== undefined) {
+      if (key !== "thumbnailPreview") {
+        // Special handling for files
         if (key === "thumbnail" || key === "video_file") {
           if (formData[key] instanceof File) {
             formDataToSend.append(key, formData[key]);
           }
         } else {
-          formDataToSend.append(key, formData[key]);
+          // For all other fields, only add if not null/undefined
+          if (formData[key] !== null && formData[key] !== undefined) {
+            formDataToSend.append(key, formData[key]);
+          }
         }
       }
     });
     
-    // Explicitly add a _method field to help PHP recognize it
+    // Make sure to include the action
     if (isEditing) {
-      formDataToSend.append('_method', 'PUT');
+      formDataToSend.append('action', 'update');
+    } else {
+      formDataToSend.append('action', 'create');
     }
     
     try {
-      const action = isEditing ? 'update' : 'create';
-      const url = `${BASE_URL}?action=${action}`;
+      // Create a direct simple POST to the right URL
+      const url = `${BASE_URL}`;
+      
+      console.log("Submitting to URL:", url);
+      console.log("Is editing?", isEditing);
+      console.log("Form data:", Object.fromEntries(formDataToSend));
       
       const response = await fetch(url, {
         method: "POST",
-        // Don't set Content-Type header when using FormData, let the browser set it with boundary
-        headers: {
-          // Add this to make sure PHP recognizes it as a POST request
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: formDataToSend,
-        // Include credentials if your server requires cookies
-        // credentials: 'include'
+        body: formDataToSend
       });
       
-      // Log the actual response for debugging
+      // Log the response for debugging
       const responseText = await response.text();
       console.log("Raw response:", responseText);
       
-      // Try to parse the response as JSON
+      // Try to parse as JSON
       let data;
       try {
         data = JSON.parse(responseText);
       } catch (e) {
         console.error("Failed to parse response as JSON:", e);
         throw new Error("Server returned invalid JSON");
-      }
-      
-      if (!response.ok) {
-        throw new Error(data.message || `HTTP error! status: ${response.status}`);
       }
       
       if (data.success) {
